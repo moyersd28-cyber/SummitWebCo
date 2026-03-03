@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Summit Web Co | Secure Access</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+body{margin:0;font-family:Segoe UI;background:#0f172a;color:white}
+.center{display:flex;justify-content:center;align-items:center;height:100vh}
+.box{background:#1e293b;padding:40px;border-radius:12px;width:350px;text-align:center}
+input{width:100%;padding:12px;margin:10px 0;border:none;border-radius:6px}
+button{padding:10px 20px;border:none;border-radius:6px;background:#2563eb;color:white;cursor:pointer}
+.hidden{display:none}
+.sidebar{width:240px;height:100vh;background:#1e293b;position:fixed;padding-top:20px}
+.sidebar h2{text-align:center}
+.sidebar button{width:100%;background:none;text-align:left;padding:15px;color:white}
+.main{margin-left:240px;padding:20px}
+.card{background:#1e293b;padding:20px;border-radius:12px;margin:10px;display:inline-block;width:220px}
+</style>
+</head>
+<body>
+
+<!-- ACCESS SCREEN -->
+<div class="center" id="accessScreen">
+<div class="box">
+<h2>Summit Web Co</h2>
+<p>Enter Access Code</p>
+<input id="accessCode" placeholder="Enter Secure Code">
+<button onclick="enterSystem()">Access System</button>
+<p id="error" style="color:red"></p>
+</div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="hidden">
+
+<div class="sidebar">
+<h2>Summit</h2>
+<button onclick="view('home')">Dashboard</button>
+<button onclick="view('projects')">Projects</button>
+<button onclick="view('analytics')">Analytics</button>
+<button id="devBtn" class="hidden" onclick="view('dev')">Dev Panel</button>
+<button onclick="logout()">Exit</button>
+</div>
+
+<div class="main">
+
+<div id="home">
+<h1>Welcome <span id="roleDisplay"></span></h1>
+<div class="card">Projects<br><span id="projectCount"></span></div>
+</div>
+
+<div id="projects" class="hidden">
+<h2>Projects</h2>
+<input id="projName" placeholder="Project Name">
+<select id="projStatus">
+<option>Pending</option>
+<option>In Progress</option>
+<option>Completed</option>
+<option>Delayed</option>
+</select>
+<button onclick="addProject()">Add</button>
+<ul id="projectList"></ul>
+</div>
+
+<div id="analytics" class="hidden">
+<h2>Analytics</h2>
+<canvas id="chart"></canvas>
+</div>
+
+<div id="dev" class="hidden">
+<h2>Developer Panel</h2>
+<button onclick="resetSystem()">Reset System</button>
+<button onclick="exportData()">Export Data</button>
+</div>
+
+</div>
+</div>
+
+<script>
+
+// ==========================
+// ACCESS CODE CONFIG
+// ==========================
+
+const ACCESS_CODES = {
+    SUPERADMIN: "SUMMIT-ROOT-7788",
+    ADMIN: "SUMMIT-ADMIN-4455",
+    DEV: "SUMMIT-DEV-9900"
+};
+
+let currentRole = null;
+
+// ==========================
+// ENTER SYSTEM
+// ==========================
+
+function enterSystem(){
+    let code = document.getElementById("accessCode").value;
+
+    if(code === ACCESS_CODES.SUPERADMIN){
+        currentRole = "SuperAdmin";
+    }
+    else if(code === ACCESS_CODES.ADMIN){
+        currentRole = "Admin";
+    }
+    else if(code === ACCESS_CODES.DEV){
+        currentRole = "Developer";
+    }
+    else{
+        document.getElementById("error").innerText = "Invalid Access Code.";
+        return;
+    }
+
+    startDashboard();
+}
+
+function startDashboard(){
+    document.getElementById("accessScreen").classList.add("hidden");
+    document.getElementById("dashboard").classList.remove("hidden");
+    document.getElementById("roleDisplay").innerText = currentRole;
+
+    if(currentRole === "SuperAdmin"){
+        document.getElementById("devBtn").classList.remove("hidden");
+    }
+
+    if(!localStorage.getItem("projects")){
+        localStorage.setItem("projects", JSON.stringify([]));
+    }
+
+    loadProjects();
+}
+
+function logout(){
+    location.reload();
+}
+
+// ==========================
+// NAVIGATION
+// ==========================
+
+function view(section){
+    ["home","projects","analytics","dev"].forEach(id=>{
+        document.getElementById(id).classList.add("hidden");
+    });
+    document.getElementById(section).classList.remove("hidden");
+
+    if(section==="analytics"){
+        renderChart();
+    }
+}
+
+// ==========================
+// PROJECT SYSTEM
+// ==========================
+
+function addProject(){
+    if(currentRole === "Developer"){
+        alert("Developers cannot create projects.");
+        return;
+    }
+
+    let name = projName.value;
+    let status = projStatus.value;
+    if(!name) return;
+
+    let projects = JSON.parse(localStorage.getItem("projects"));
+    projects.push({name,status});
+    localStorage.setItem("projects", JSON.stringify(projects));
+    loadProjects();
+}
+
+function loadProjects(){
+    let projects = JSON.parse(localStorage.getItem("projects"));
+    projectCount.innerText = projects.length;
+
+    let list = document.getElementById("projectList");
+    list.innerHTML="";
+    projects.forEach(p=>{
+        list.innerHTML += `<li>${p.name} - ${p.status}</li>`;
+    });
+}
+
+// ==========================
+// ANALYTICS
+// ==========================
+
+function renderChart(){
+    let projects = JSON.parse(localStorage.getItem("projects"));
+    let counts = {Pending:0,"In Progress":0,Completed:0,Delayed:0};
+
+    projects.forEach(p=>counts[p.status]++);
+
+    new Chart(chart,{
+        type:'bar',
+        data:{
+            labels:Object.keys(counts),
+            datasets:[{label:'Projects',data:Object.values(counts)}]
+        }
+    });
+}
+
+// ==========================
+// DEV PANEL
+// ==========================
+
+function resetSystem(){
+    if(currentRole !== "SuperAdmin"){
+        alert("Access Denied.");
+        return;
+    }
+    localStorage.clear();
+    location.reload();
+}
+
+function exportData(){
+    if(currentRole !== "SuperAdmin"){
+        alert("Access Denied.");
+        return;
+    }
+    alert(JSON.stringify(localStorage,null,2));
+}
+
+</script>
+</body>
+</html>
