@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Support | Summit Web Co.</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --primary: #0f172a;        /* Navy from homepage/sales */
+  --primary-dark: #0a1320;   /* Darker navy for hover */
+  --light-bg: #f1f5f9;
+  --border: #e2e8f0;
+  --text-muted: #64748b;
+  --card-bg: #ffffff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  background: var(--light-bg);
+  color: var(--primary);
+  line-height: 1.6;
+}
+
+/* HERO */
+header {
+  padding: 100px 20px 80px;
+  text-align: center;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+header h1 {
+  font-size: 2.8rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+header p {
+  max-width: 650px;
+  margin: auto;
+  opacity: 0.9;
+  font-weight: 400;
+  font-size: 1rem;
+}
+
+/* TABS */
+.tabs {
+  display: flex;
+  justify-content: center;
+  margin: 50px auto 40px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tab-button {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-bottom: none;
+  padding: 12px 20px;
+  border-radius: 8px 8px 0 0;
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--primary);
+  transition: 0.3s ease;
+}
+
+.tab-button.active {
+  background: var(--primary);
+  color: white;
+  border-bottom: 3px solid var(--primary-dark);
+}
+
+.tab-button:hover {
+  background: var(--primary-dark);
+  color: white;
+}
+
+/* TAB CONTENT */
+.tab-content {
+  max-width: 700px;
+  margin: auto;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 35px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.05);
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.tab-content h2 {
+  margin-bottom: 20px;
+  font-size: 1.3rem;
+  color: var(--primary);
+}
+
+/* FORM STYLES */
+label {
+  display: block;
+  margin-top: 16px;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 13px;
+  margin-top: 6px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  font-size: 0.95rem;
+  transition: 0.2s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(15,23,42,0.15);
+}
+
+button {
+  margin-top: 22px;
+  padding: 14px;
+  width: 100%;
+  border-radius: 8px;
+  border: none;
+  background: var(--primary);
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+button:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+/* FOOTER NOTE */
+.footer-note {
+  text-align: center;
+  margin: 60px 0 40px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* RESPONSIVE */
+@media(max-width: 500px){
+  .tab-button{
+    flex: 1 1 100%;
+    text-align:center;
+  }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Customer Support</h1>
+  <p>Submit your request and our team will respond within 24–48 hours. Fast, professional, and reliable support for all Summit Web Co. clients.</p>
+</header>
+
+<!-- TAB BUTTONS -->
+<div class="tabs">
+  <div class="tab-button active" data-tab="websiteFormTab">Website Issue</div>
+  <div class="tab-button" data-tab="billingFormTab">Billing / Payment</div>
+  <div class="tab-button" data-tab="generalFormTab">General Inquiry</div>
+  <div class="tab-button" data-tab="feedbackFormTab">Feedback / Suggestion</div>
+</div>
+
+<!-- TAB CONTENT -->
+<section class="tab-content active" id="websiteFormTab">
+  <h2>Website Issue</h2>
+  <form id="websiteForm">
+    <label>Full Name</label>
+    <input type="text" id="webName" required>
+
+    <label>Email / Discord</label>
+    <input type="text" id="webEmail" required>
+
+    <label>Website URL</label>
+    <input type="url" id="webURL" required>
+
+    <label>Issue Type</label>
+    <select id="webIssue" required>
+      <option value="">Select Issue</option>
+      <option>Design Bug</option>
+      <option>Functionality</option>
+      <option>Loading / Error</option>
+      <option>Other</option>
+    </select>
+
+    <label>Description</label>
+    <textarea id="webDesc" rows="4" required></textarea>
+
+    <button type="submit">Submit Request</button>
+  </form>
+</section>
+
+<section class="tab-content" id="billingFormTab">
+  <h2>Billing / Payment</h2>
+  <form id="billingForm">
+    <label>Full Name</label>
+    <input type="text" id="billName" required>
+
+    <label>Email / Discord</label>
+    <input type="text" id="billEmail" required>
+
+    <label>Invoice / Order Number</label>
+    <input type="text" id="invoiceNum" required>
+
+    <label>Payment Method</label>
+    <input type="text" id="payMethod" required>
+
+    <label>Issue Type</label>
+    <select id="billIssue" required>
+      <option value="">Select Issue</option>
+      <option>Incorrect Charge</option>
+      <option>Refund Request</option>
+      <option>Payment Failed</option>
+      <option>Other</option>
+    </select>
+
+    <label>Description</label>
+    <textarea id="billDesc" rows="4" required></textarea>
+
+    <button type="submit">Submit Request</button>
+  </form>
+</section>
+
+<section class="tab-content" id="generalFormTab">
+  <h2>General Inquiry</h2>
+  <form id="generalForm">
+    <label>Full Name</label>
+    <input type="text" id="genName" required>
+
+    <label>Email / Discord</label>
+    <input type="text" id="genEmail" required>
+
+    <label>Inquiry Type</label>
+    <select id="genType" required>
+      <option value="">Select Type</option>
+      <option>Services</option>
+      <option>Updates</option>
+      <option>Other</option>
+    </select>
+
+    <label>Description</label>
+    <textarea id="genDesc" rows="4" required></textarea>
+
+    <button type="submit">Submit Request</button>
+  </form>
+</section>
+
+<section class="tab-content" id="feedbackFormTab">
+  <h2>Feedback / Suggestion</h2>
+  <form id="feedbackForm">
+    <label>Full Name</label>
+    <input type="text" id="feedName" required>
+
+    <label>Email / Discord</label>
+    <input type="text" id="feedEmail" required>
+
+    <label>Feedback Type</label>
+    <select id="feedType" required>
+      <option value="">Select Type</option>
+      <option>Feature Request</option>
+      <option>Service Improvement</option>
+      <option>General Feedback</option>
+    </select>
+
+    <label>Description / Suggestion</label>
+    <textarea id="feedDesc" rows="4" required></textarea>
+
+    <button type="submit">Submit Request</button>
+  </form>
+</section>
+
+<div class="footer-note">
+  Summit Web Co. — Premium Professional Support
+</div>
+
+<script>
+/* TAB SWITCHING */
+const tabButtons = document.querySelectorAll('.tab-button');
+const tabContents = document.querySelectorAll('.tab-content');
+
+tabButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    tabButtons.forEach(b => b.classList.remove('active'));
+    tabContents.forEach(c => c.classList.remove('active'));
+
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+/* DISCORD WEBHOOK SCRIPT */
+const webhookURL = "YOUR_DISCORD_WEBHOOK_URL";
+
+async function sendToDiscord(payload) {
+  try {
+    const response = await fetch(webhookURL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    return response.ok;
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+}
+
+function handleForm(formId, fieldsMap, title) {
+  document.getElementById(formId).addEventListener("submit", async function(e) {
+    e.preventDefault();
+    const payload = {
+      embeds: [{
+        title: `New ${title}`,
+        color: 0x0f172a,
+        fields: Object.keys(fieldsMap).map(key => ({
+          name: key,
+          value: document.getElementById(fieldsMap[key]).value,
+          inline: false
+        })),
+        timestamp: new Date()
+      }]
+    };
+    const success = await sendToDiscord(payload);
+    if(success) {
+      alert("Submitted successfully!");
+      document.getElementById(formId).reset();
+    } else {
+      alert("Error submitting. Try again later.");
+    }
+  });
+}
+
+handleForm("websiteForm", {
+  "Name": "webName",
+  "Email / Discord": "webEmail",
+  "Website URL": "webURL",
+  "Issue Type": "webIssue",
+  "Description": "webDesc"
+}, "Website Issue");
+
+handleForm("billingForm", {
+  "Name": "billName",
+  "Email / Discord": "billEmail",
+  "Invoice / Order Number": "invoiceNum",
+  "Payment Method": "payMethod",
+  "Issue Type": "billIssue",
+  "Description": "billDesc"
+}, "Billing Issue");
+
+handleForm("generalForm", {
+  "Name": "genName",
+  "Email / Discord": "genEmail",
+  "Inquiry Type": "genType",
+  "Description": "genDesc"
+}, "General Inquiry");
+
+handleForm("feedbackForm", {
+  "Name": "feedName",
+  "Email / Discord": "feedEmail",
+  "Feedback Type": "feedType",
+  "Description": "feedDesc"
+}, "Feedback / Suggestion");
+
+</script>
+
+</body>
+</html>

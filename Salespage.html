@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Summit Web Co. | Pricing</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+html { scroll-behavior: smooth; }
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;404
+
+  color: #1e293b;
+  background: #ffffff;
+  line-height: 1.6;
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: auto;
+}
+
+nav {
+  background: #0f172a;
+  padding: 1rem 0;
+}
+
+nav .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+nav h1 {
+  color: white;
+  font-size: 1.5rem;
+}
+
+nav a {
+  color: #cbd5e1;
+  margin-left: 2rem;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+nav a:hover {
+  color: #38bdf8;
+}
+
+section {
+  padding: 5rem 0;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 3rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* Pricing Cards */
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.price-card {
+  background: #f8fafc;
+  padding: 2rem;
+  border-radius: 8px;
+  text-align: center;
+  transition: 0.3s;
+}
+
+.price-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.price-card h3 {
+  margin-bottom: 1rem;
+}
+
+.price {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #0f172a;
+}
+
+.price-card ul {
+  list-style: none;
+  margin-bottom: 2rem;
+}
+
+.price-card li {
+  margin: 0.5rem 0;
+}
+
+.btn {
+  padding: 0.7rem 1.8rem;
+  background: #38bdf8;
+  color: #0f172a;
+  border-radius: 6px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  background: #0ea5e9;
+}
+
+/* Order Form */
+
+form {
+  max-width: 700px;
+  margin: auto;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1.2rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-family: inherit;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+footer {
+  background: #020617;
+  color: #94a3b8;
+  text-align: center;
+  padding: 2rem 0;
+  font-size: 0.9rem;
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <h1>Summit Web Co.</h1>
+    <div>
+      <div>
+        <a href="index.html">Home</a>
+        <a href="Salespage.html">Pricing</a>
+        <a href="csp.html">Contact</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<section>
+  <div class="container">
+    <h2 class="section-title">Transparent Website Packages</h2>
+    <p style="text-align:center; max-width:750px; margin:0 auto 3rem auto; color:#475569;">
+      At Summit Web Co., we believe professional web design should be accessible. 
+      Our pricing is simple, transparent, and designed to give businesses a strong digital foundation without unnecessary costs.
+    </p>
+
+    <div class="pricing-grid">
+
+      <div class="price-card">
+        <h3>Basic Website</h3>
+        <div class="price">$5 – $10</div>
+        <p style="margin-bottom:1.5rem; color:#475569;">
+          Ideal for individuals and small businesses looking to establish a clean, professional online presence.
+        </p>
+        <ul>
+          <li>Responsive Design (Mobile-Friendly)</li>
+          <li>Essential Pages (Home, About, Contact)</li>
+          <li>Professional Layout & Structure</li>
+          <li>Basic Contact Form Integration</li>
+        </ul>
+        <a href="#order" class="btn">Get Started</a>
+      </div>
+
+      <div class="price-card">
+        <h3>Pro Website</h3>
+        <div class="price">$10 – $15</div>
+        <p style="margin-bottom:1.5rem; color:#475569;">
+          Designed for growing businesses that need more flexibility, optimization, and performance.
+        </p>
+        <ul>
+          <li>Expanded Page Count</li>
+          <li>Enhanced Design Customization</li>
+          <li>Basic SEO Setup</li>
+          <li>Performance Optimization</li>
+        </ul>
+        <a href="#order" class="btn">Choose Pro</a>
+      </div>
+
+      <div class="price-card">
+        <h3>Maintenance Package</h3>
+        <div class="price">$5 / Month</div>
+        <p style="margin-bottom:1.5rem; color:#475569;">
+          Ongoing support to keep your website secure, updated, and running smoothly.
+        </p>
+        <ul>
+          <li>Content Updates</li>
+          <li>Security Monitoring</li>
+          <li>Performance Checks</li>
+          <li>Technical Support</li>
+        </ul>
+        <a href="#order" class="btn">Subscribe</a>
+      </div>
+
+      <div class="price-card">
+        <h3>Custom Solutions</h3>
+        <div class="price">Priced Per Project</div>
+        <p style="margin-bottom:1.5rem; color:#475569;">
+          For businesses that require specialized functionality or advanced development.
+        </p>
+        <ul>
+          <li>E-Commerce Integration</li>
+          <li>Custom Features</li>
+          <li>Advanced Development</li>
+          <li>Scalable Architecture</li>
+        </ul>
+        <a href="#order" class="btn">Request Quote</a>
+      </div>
+
+    </div>
+
+    <p style="text-align:center; margin-top:3rem; color:#64748b; font-size:0.95rem;">
+      *Clients are responsible for covering the cost of domain registration and hosting services.
+    </p>
+
+  </div>
+</section>
+
+<section id="order">
+  <div class="container">
+    <h2 class="section-title">Start Your Project</h2>
+    <form>
+      <input type="text" placeholder="Full Name" required>
+      <input type="email" placeholder="Email Address" required>
+      <select required>
+        <option value="">Select Package</option>
+        <option>Starter</option>
+        <option>Growth</option>
+        <option>Enterprise</option>
+      </select>
+      <textarea placeholder="Tell us about your project..."></textarea>
+      <button class="btn" type="submit">Submit Request</button>
+    </form>
+  </div>
+</section>
+
+<footer class="swc-footer">
+  © 2026 Summit Web Co. All Rights Reserved.
+</footer>
+
+</body>
+</html>
