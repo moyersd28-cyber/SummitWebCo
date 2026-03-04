@@ -17,6 +17,7 @@
   --card-bg: #ffffff;
 }
 
+/* GLOBAL RESET */
 * {
   margin: 0;
   padding: 0;
@@ -28,6 +29,43 @@ body {
   background: var(--light-bg);
   color: var(--primary);
   line-height: 1.6;
+}
+
+/* NAVIGATION */
+nav {
+  position: fixed;
+  width: 100%;
+  background: var(--primary);
+  padding: 1rem 0;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+nav .container {
+  width: 90%;
+  max-width: 1200px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+nav h1 {
+  color: white;
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+nav a {
+  color: #cbd5e1;
+  text-decoration: none;
+  font-weight: 500;
+  margin-left: 2rem;
+  transition: 0.3s;
+}
+
+nav a:hover {
+  color: #38bdf8;
 }
 
 /* HERO */
@@ -166,9 +204,38 @@ button:hover {
     text-align:center;
   }
 }
+
+/*Trademark*/
+.swc-footer {
+  background: #020617;       /* dark footer background */
+  color: #94a3b8;            /* muted text color */
+  text-align: center;
+  padding: 1.5rem 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.swc-footer sup {
+  font-size: 0.6rem;          /* make ™ small */
+  vertical-align: super;
+  margin-left: 2px;
+}
+
 </style>
 </head>
 <body>
+
+<nav>
+  <div class="container">
+    <h1>Summit Web Co.</h1>
+    <div>
+      <a href="Homepage.html">Home</a>
+      <a href="Salespage.html">Pricing</a>
+      <a href="csp.html">Contact</a>
+    </div>
+  </div>
+</nav>
 
 <header>
   <h1>Customer Support</h1>
@@ -291,9 +358,9 @@ button:hover {
   </form>
 </section>
 
-<div class="footer-note">
-  Summit Web Co. — Premium Professional Support
-</div>
+<footer class="swc-footer">
+  © 2026 Summit Web Co. All Rights Reserved.
+</footer>
 
 <script>
 /* TAB SWITCHING */
@@ -330,24 +397,44 @@ async function sendToDiscord(payload) {
 function handleForm(formId, fieldsMap, title) {
   document.getElementById(formId).addEventListener("submit", async function(e) {
     e.preventDefault();
+
+    const formData = {};
+    Object.keys(fieldsMap).forEach(key => {
+      formData[key] = document.getElementById(fieldsMap[key]).value;
+    });
+
+    // Firestore save
+    try {
+      await addDoc(collection(db, "tickets"), {
+        type: title,
+        ...formData,
+        createdAt: serverTimestamp()
+      });
+    } catch (error) {
+      console.error("Firestore Error:", error);
+    }
+
+    // Discord webhook
     const payload = {
       embeds: [{
         title: `New ${title}`,
         color: 0x0f172a,
-        fields: Object.keys(fieldsMap).map(key => ({
+        fields: Object.keys(formData).map(key => ({
           name: key,
-          value: document.getElementById(fieldsMap[key]).value,
+          value: formData[key],
           inline: false
         })),
         timestamp: new Date()
       }]
     };
+
     const success = await sendToDiscord(payload);
+
     if(success) {
       alert("Submitted successfully!");
       document.getElementById(formId).reset();
     } else {
-      alert("Error submitting. Try again later.");
+      alert("Submitted, but Discord failed.");
     }
   });
 }
@@ -383,6 +470,27 @@ handleForm("feedbackForm", {
   "Description": "feedDesc"
 }, "Feedback / Suggestion");
 
+</script>
+
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCSBbgbEqdwm4WthtcaeMx54HNvTStsHIg",
+  authDomain: "summit-web-co.firebaseapp.com",
+  projectId: "summit-web-co",
+  storageBucket: "summit-web-co.firebasestorage.app",
+  messagingSenderId: "532909980411",
+  appId: "1:532909980411:web:f78f28e2390027b8a38e5e"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window.db = db;
+window.firebaseFunctions = { collection, addDoc, getDocs, onSnapshot, query, orderBy, serverTimestamp };
 </script>
 
 </body>
