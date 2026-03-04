@@ -183,14 +183,34 @@ section {
   font-size: 2rem;
 }
 
-/* Footer */
+/* Admin Button*/
 footer {
-  background: #020617;
+  background: #0f172a;     /* navy footer background */
   color: #94a3b8;
   text-align: center;
   padding: 2rem 0;
   font-size: 0.9rem;
+  position: relative;      /* needed for absolutely positioning the button inside */
 }
+
+.footer-admin {
+  position: absolute;
+  bottom: 8px;             /* inside the footer padding */
+  right: 16px;             /* small distance from right edge */
+  width: 16px;             /* small & discreet */
+  height: 16px;            /* small square */
+  background: #2563eb;     /* accent color matching buttons */
+  border-radius: 4px;      /* subtle rounding */
+  opacity: 0.3;            /* very subtle */
+  transition: opacity 0.3s, background 0.3s;
+  cursor: pointer;
+}
+
+.footer-admin:hover {
+  opacity: 1;
+  background: #38bdf8;     /* slightly brighter on hover */
+}
+
 </style>
 </head>
 <body>
@@ -289,6 +309,10 @@ function typeEffect() {
 
 window.onload = typeEffect;
 </script>
+
+<footer>
+  <a href="adminpage.html" class="footer-admin" title="Admin Panel"></a>
+</footer>
 
 </body>
 </html>
