@@ -17,8 +17,7 @@ html { scroll-behavior: smooth; }
 }
 
 body {
-  font-family: 'Inter', sans-serif;404
-
+  font-family: 'Inter', sans-serif;
   color: #1e293b;
   background: #ffffff;
   line-height: 1.6;
@@ -161,7 +160,7 @@ footer {
     <h1>Summit Web Co.</h1>
     <div>
       <div>
-        <a href="index.html">Home</a>
+        <a href="Homepage.html">Home</a>
         <a href="Salespage.html">Pricing</a>
         <a href="csp.html">Contact</a>
       </div>
@@ -251,16 +250,20 @@ footer {
 <section id="order">
   <div class="container">
     <h2 class="section-title">Start Your Project</h2>
-    <form>
-      <input type="text" placeholder="Full Name" required>
-      <input type="email" placeholder="Email Address" required>
-      <select required>
+    <form id="orderForm">
+      <input type="text" id="clientName" placeholder="Full Name" required>
+      <input type="email" id="clientEmail" placeholder="Email Address" required>
+
+      <select id="packageSelect" required>
         <option value="">Select Package</option>
-        <option>Starter</option>
-        <option>Growth</option>
-        <option>Enterprise</option>
+        <option>Basic Website</option>
+        <option>Pro Website</option>
+        <option>Maintenance Package</option>
+        <option>Custom Solution</option>
       </select>
-      <textarea placeholder="Tell us about your project..."></textarea>
+
+      <textarea id="projectDetails" placeholder="Tell us about your project..."></textarea>
+
       <button class="btn" type="submit">Submit Request</button>
     </form>
   </div>
@@ -269,6 +272,53 @@ footer {
 <footer class="swc-footer">
   © 2026 Summit Web Co. All Rights Reserved.
 </footer>
+
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCSBbgbEqdwm4WthtcaeMx54HNvTStsHIg",
+  authDomain: "summit-web-co.firebaseapp.com",
+  projectId: "summit-web-co",
+  storageBucket: "summit-web-co.firebasestorage.app",
+  messagingSenderId: "532909980411",
+  appId: "1:532909980411:web:f78f28e2390027b8a38e5e"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// FORM SUBMISSION
+const form = document.getElementById("orderForm");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const name = document.getElementById("clientName").value;
+  const email = document.getElementById("clientEmail").value;
+  const packageType = document.getElementById("packageSelect").value;
+  const details = document.getElementById("projectDetails").value;
+
+  try {
+    await addDoc(collection(db, "orders"), {
+      name: name,
+      email: email,
+      package: packageType,
+      details: details,
+      created: serverTimestamp()
+    });
+
+    alert("Your project request has been submitted successfully.");
+    form.reset();
+
+  } catch (error) {
+    console.error("Error submitting order:", error);
+    alert("There was an issue submitting your request.");
+  }
+});
+</script>
 
 </body>
 </html>
