@@ -1,238 +1,213 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="icon" href="/SummitWebCo/favicon.ico" type="image/x-icon">
-<title>Summit Web Co | Secure Access</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<title>Summit Web Co Admin</title>
+
 <style>
-body{margin:0;font-family:Segoe UI;background:#0f172a;color:white}
-.center{display:flex;justify-content:center;align-items:center;height:100vh}
-.box{background:#1e293b;padding:40px;border-radius:12px;width:350px;text-align:center}
-input,select,textarea{width:100%;padding:10px;margin:8px 0;border:none;border-radius:6px}
-button{padding:10px 20px;border:none;border-radius:6px;background:#2563eb;color:white;cursor:pointer}
-.hidden{display:none}
-.sidebar{width:240px;height:100vh;background:#1e293b;position:fixed;padding-top:20px}
-.sidebar h2{text-align:center;margin-bottom:20px}
-.sidebar button{width:100%;background:none;text-align:left;padding:15px;color:white;border:none;cursor:pointer;transition:0.2s}
-.sidebar button:hover,.sidebar button.active{background:#2563eb}
-.main{margin-left:240px;padding:20px}
-.card{background:#1e293b;padding:20px;border-radius:12px;margin:10px;display:inline-block;width:220px;text-align:center}
-ul{list-style:none;padding:0}
-li{background:#1e293b;padding:10px;margin:5px 0;border-radius:6px}
+
+body{
+font-family:Segoe UI;
+margin:0;
+background:#0f172a;
+color:white;
+}
+
+header{
+background:#020617;
+padding:20px;
+text-align:center;
+font-size:22px;
+}
+
+.dashboard{
+display:flex;
+gap:20px;
+padding:20px;
+}
+
+.card{
+background:#1e293b;
+padding:20px;
+border-radius:10px;
+flex:1;
+text-align:center;
+}
+
+.section{
+padding:20px;
+}
+
+.item{
+background:#1e293b;
+padding:15px;
+margin-bottom:10px;
+border-radius:8px;
+}
+
+button{
+margin-top:10px;
+padding:8px 12px;
+border:none;
+border-radius:6px;
+background:#38bdf8;
+cursor:pointer;
+}
+
+button:hover{
+background:#0ea5e9;
+}
+
 </style>
 </head>
 <body>
 
-<div class="center" id="accessScreen">
-  <div class="box">
-    <h2>Summit Web Co</h2>
-    <p>Enter Access Code</p>
-    <input id="accessCode">
-    <button onclick="enterSystem()">Access</button>
-    <p id="error" style="color:red"></p>
-  </div>
+<header>
+Summit Web Co Admin Dashboard
+</header>
+
+<div class="dashboard">
+
+<div class="card">
+<h2 id="orderCount">0</h2>
+Orders
 </div>
 
-<div id="dashboard" class="hidden">
-
-<div class="sidebar">
-<h2>Summit</h2>
-<button id="btnHome" onclick="view('home')">Dashboard</button>
-<button id="btnProjects" onclick="view('projects')">Projects</button>
-<button id="btnOrders" onclick="view('orders')">Orders</button>
-<button id="btnTickets" onclick="view('tickets')">Support Tickets</button>
-<button id="btnAnalytics" onclick="view('analytics')">Analytics</button>
-<button id="devBtn" class="hidden" onclick="view('dev')">Dev Panel</button>
-<button onclick="logout()">Exit</button>
+<div class="card">
+<h2 id="ticketCount">0</h2>
+Support Tickets
 </div>
 
-<div class="main">
-
-<div id="home">
-<h1>Welcome <span id="roleDisplay"></span></h1>
-<div class="card">Projects<br><span id="projectCount"></span></div>
-<div class="card">Orders<br><span id="orderCount"></span></div>
-<div class="card">Tickets<br><span id="ticketCount"></span></div>
 </div>
 
-<div id="projects" class="hidden">
-<h2>Projects</h2>
-<input id="projName" placeholder="Project Name">
-<select id="projStatus">
-<option>Pending</option>
-<option>In Progress</option>
-<option>Completed</option>
-<option>Delayed</option>
-</select>
-<button onclick="addProject()">Add</button>
-<ul id="projectList"></ul>
-</div>
+<div class="section">
 
-<div id="orders" class="hidden">
 <h2>Orders</h2>
-<ul id="orderList"></ul>
-</div>
+<div id="ordersList"></div>
 
-<div id="tickets" class="hidden">
 <h2>Support Tickets</h2>
-<ul id="ticketList"></ul>
-</div>
-
-<div id="analytics" class="hidden">
-<h2>Analytics</h2>
-<canvas id="chart"></canvas>
-</div>
-
-<div id="dev" class="hidden">
-<h2>Developer Panel</h2>
-<button onclick="resetSystem()">Reset System</button>
-</div>
+<div id="ticketsList"></div>
 
 </div>
-</div>
 
-<script>
-const ACCESS_CODES={
-SUPERADMIN:"SUMMIT-ROOT-7788",
-ADMIN:"SUMMIT-ADMIN-4455",
-DEV:"SUMMIT-DEV-9900"
-};
-let currentRole=null;
-
-function enterSystem(){
-let code=accessCode.value;
-if(code===ACCESS_CODES.SUPERADMIN) currentRole="SuperAdmin";
-else if(code===ACCESS_CODES.ADMIN) currentRole="Admin";
-else if(code===ACCESS_CODES.DEV) currentRole="Developer";
-else{error.innerText="Invalid Code";return;}
-startDashboard();
-}
-
-function startDashboard(){
-accessScreen.classList.add("hidden");
-dashboard.classList.remove("hidden");
-roleDisplay.innerText=currentRole;
-if(currentRole==="SuperAdmin") devBtn.classList.remove("hidden");
-
-if(!localStorage.getItem("projects")) localStorage.setItem("projects","[]");
-if(!localStorage.getItem("orders")) localStorage.setItem("orders","[]");
-if(!localStorage.getItem("tickets")) localStorage.setItem("tickets","[]");
-
-view("home");
-listenForOrders();
-listenForTickets();
-loadProjects(); // keep projects local if you want
-}
-
-function logout(){location.reload();}
-
-function view(section){
-["home","projects","orders","tickets","analytics","dev"].forEach(id=>{
-let el=document.getElementById(id);
-if(el) el.classList.add("hidden");
-});
-document.getElementById(section).classList.remove("hidden");
-if(section==="analytics") renderChart();
-}
-
-function addProject(){
-let data=JSON.parse(localStorage.getItem("projects"));
-data.push({name:projName.value,status:projStatus.value});
-localStorage.setItem("projects",JSON.stringify(data));
-loadProjects();
-}
-
-function loadProjects(){
-let data=JSON.parse(localStorage.getItem("projects"));
-projectCount.innerText=data.length;
-projectList.innerHTML="";
-data.forEach(p=>projectList.innerHTML+=`<li>${p.name} - ${p.status}</li>`);
-}
-
-function renderChart(){
-new Chart(chart,{
-type:'bar',
-data:{
-labels:["Projects","Orders","Tickets"],
-datasets:[{
-data:[
-JSON.parse(localStorage.getItem("projects")).length,
-parseInt(orderCount.innerText || 0),
-parseInt(ticketCount.innerText || 0)
-],
-backgroundColor:"#38bdf8"
-}]},
-options:{plugins:{legend:{display:false}}}
-});
-}
-
-function resetSystem(){
-if(currentRole!=="SuperAdmin"){alert("Access Denied");return;}
-localStorage.clear();
-location.reload();
-}
-</script>
-
-<!-- Firebase SDK -->
 <script type="module">
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+import {
+getFirestore,
+collection,
+onSnapshot,
+deleteDoc,
+doc
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCSBbgbEqdwm4WthtcaeMx54HNvTStsHIg",
-  authDomain: "summit-web-co.firebaseapp.com",
-  projectId: "summit-web-co",
-  storageBucket: "summit-web-co.firebasestorage.app",
-  messagingSenderId: "532909980411",
-  appId: "1:532909980411:web:f78f28e2390027b8a38e5e"
+
+apiKey: "YOUR NEW API KEY",
+authDomain: "summit-web-co.firebaseapp.com",
+projectId: "summit-web-co",
+storageBucket: "summit-web-co.firebasestorage.app",
+messagingSenderId: "532909980411",
+appId: "1:532909980411:web:f78f28e2390027b8a38e5e"
+
 };
+
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const { collection, onSnapshot, query, orderBy } = window.firebaseFunctions;
 
-/* LOAD ORDERS LIVE */
-function listenForOrders() {
-  const q = query(collection(db, "orders"), orderBy("createdAt", "desc"));
-  onSnapshot(q, (snapshot) => {
-    orderList.innerHTML = "";
-    orderCount.innerText = snapshot.size;
+/* LOAD ORDERS */
 
-    snapshot.forEach(doc => {
-      const data = doc.data();
-      orderList.innerHTML += `
-        <li>
-          <strong>${data.name || "No Name"}</strong><br>
-          Package: ${data.package || "N/A"}<br>
-          Email: ${data.email || "N/A"}
-        </li>
-      `;
-    });
-  });
+onSnapshot(collection(db,"orders"), snapshot => {
+
+const ordersList=document.getElementById("ordersList");
+
+ordersList.innerHTML="";
+document.getElementById("orderCount").innerText=snapshot.size;
+
+snapshot.forEach(docItem=>{
+
+const data=docItem.data();
+
+ordersList.innerHTML+=`
+
+<div class="item">
+
+<b>Name:</b> ${data.name || ""}<br>
+<b>Email:</b> ${data.email || ""}<br>
+<b>Service:</b> ${data.service || ""}<br>
+<b>Details:</b> ${data.details || ""}
+
+<br>
+
+<button onclick="deleteOrder('${docItem.id}')">
+Delete Order
+</button>
+
+</div>
+
+`;
+
+});
+
+});
+
+
+/* LOAD TICKETS */
+
+onSnapshot(collection(db,"tickets"), snapshot => {
+
+const ticketList=document.getElementById("ticketsList");
+
+ticketList.innerHTML="";
+document.getElementById("ticketCount").innerText=snapshot.size;
+
+snapshot.forEach(docItem=>{
+
+const data=docItem.data();
+
+ticketList.innerHTML+=`
+
+<div class="item">
+
+<b>Name:</b> ${data.name || ""}<br>
+<b>Email:</b> ${data.email || ""}<br>
+<b>Message:</b> ${data.message || ""}
+
+<br>
+
+<button onclick="deleteTicket('${docItem.id}')">
+Resolve Ticket
+</button>
+
+</div>
+
+`;
+
+});
+
+});
+
+
+/* DELETE ORDER */
+
+window.deleteOrder = async function(id){
+
+await deleteDoc(doc(db,"orders",id));
+
 }
 
-/* LOAD TICKETS LIVE */
-function listenForTickets() {
-  const q = query(collection(db, "tickets"), orderBy("createdAt", "desc"));
-  onSnapshot(q, (snapshot) => {
-    ticketList.innerHTML = "";
-    ticketCount.innerText = snapshot.size;
 
-    snapshot.forEach(doc => {
-      const data = doc.data();
-      ticketList.innerHTML += `
-        <li>
-          <strong>${data.Name || data.name || "No Name"}</strong><br>
-          Type: ${data.type || "Support"}<br>
-          ${data.Description || data.msg || ""}
-        </li>
-      `;
-    });
-  });
+/* DELETE TICKET */
+
+window.deleteTicket = async function(id){
+
+await deleteDoc(doc(db,"tickets",id));
+
 }
 
-window.db = db;
 </script>
 
 </body>
