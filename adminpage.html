@@ -184,11 +184,11 @@ query,
 orderBy,
 onSnapshot,
 doc,
-updateDoc,
-getDoc,
-setDoc,
-increment
+updateDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+
+/* FIREBASE CONFIG */
 
 const firebaseConfig = {
 apiKey: "AIzaSyCSBbgbEqdwm4WthtcaeMx54HNvTStsHIg",
@@ -199,122 +199,142 @@ messagingSenderId: "532909980411",
 appId: "1:532909980411:web:f78f28e2390027b8a38e5e"
 };
 
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-let revenueTotal = 0
 
-const orderQuery = query(collection(db,"orders"),orderBy("createdAt","desc"))
+
+/* --------------------------
+   VISITOR COUNTER (LIVE)
+-------------------------- */
+
+const visitRef = doc(db,"analytics","visits");
+
+onSnapshot(visitRef,(snap)=>{
+
+if(snap.exists()){
+
+visitors.innerText = snap.data().count;
+
+}
+
+});
+
+
+
+/* --------------------------
+   ORDERS SYSTEM
+-------------------------- */
+
+let totalRevenue = 0;
+
+const orderQuery = query(
+collection(db,"orders"),
+orderBy("createdAt","desc")
+);
 
 onSnapshot(orderQuery,(snapshot)=>{
 
-orderList.innerHTML=""
-revenueTotal=0
+orderList.innerHTML="";
+totalRevenue = 0;
 
 snapshot.forEach(docSnap=>{
 
-const data=docSnap.data()
-const id=docSnap.id
+const data = docSnap.data();
+const id = docSnap.id;
 
-revenueTotal+=data.price||0
+totalRevenue += data.price || 0;
 
-orderList.innerHTML+=`
+orderList.innerHTML += `
 <li>
-<strong>${data.name||"Customer"}</strong><br>
-Package: ${data.package||"Unknown"}<br>
-Email: ${data.email||"None"}<br>
-Price: $${data.price||0}<br>
-Status: ${data.status||"Pending"}<br>
+<strong>${data.name || "Customer"}</strong><br>
+Package: ${data.package || "Unknown"}<br>
+Email: ${data.email || "None"}<br>
+Price: $${data.price || 0}<br>
+Status: ${data.status || "Pending"}<br>
 
 <button class="statusBtn" onclick="updateOrder('${id}','Pending')">Pending</button>
 <button class="statusBtn" onclick="updateOrder('${id}','In Progress')">In Progress</button>
 <button class="statusBtn" onclick="updateOrder('${id}','Completed')">Completed</button>
 
 </li>
-`
+`;
 
-})
+});
 
-orderCount.innerText=snapshot.size
-revenue.innerText=revenueTotal.toFixed(2)
+orderCount.innerText = snapshot.size;
+revenue.innerText = totalRevenue.toFixed(2);
 
-})
+});
 
-window.updateOrder=async function(id,status){
-await updateDoc(doc(db,"orders",id),{status:status})
-}
 
-const ticketQuery=query(collection(db,"tickets"),orderBy("createdAt","desc"))
+
+/* ORDER STATUS UPDATE */
+
+window.updateOrder = async function(id,status){
+
+const ref = doc(db,"orders",id);
+
+await updateDoc(ref,{
+status:status
+});
+
+};
+
+
+
+/* --------------------------
+   TICKETS SYSTEM
+-------------------------- */
+
+const ticketQuery = query(
+collection(db,"tickets"),
+orderBy("createdAt","desc")
+);
 
 onSnapshot(ticketQuery,(snapshot)=>{
 
-ticketList.innerHTML=""
+ticketList.innerHTML="";
 
 snapshot.forEach(docSnap=>{
 
-const data=docSnap.data()
-const id=docSnap.id
+const data = docSnap.data();
+const id = docSnap.id;
 
-ticketList.innerHTML+=`
+ticketList.innerHTML += `
 <li>
-<strong>${data.name||"User"}</strong><br>
-${data.description||data.msg||""}<br>
-Status: ${data.status||"Open"}<br>
+
+<strong>${data.name || "User"}</strong><br>
+${data.description || data.msg || ""}<br>
+Status: ${data.status || "Open"}<br>
 
 <button class="statusBtn" onclick="updateTicket('${id}','Open')">Open</button>
 <button class="statusBtn" onclick="updateTicket('${id}','Working')">Working</button>
 <button class="statusBtn" onclick="updateTicket('${id}','Closed')">Closed</button>
 
 </li>
-`
+`;
 
-})
+});
 
-ticketCount.innerText=snapshot.size
+ticketCount.innerText = snapshot.size;
 
-})
+});
 
-window.updateTicket=async function(id,status){
-await updateDoc(doc(db,"tickets",id),{status:status})
-}
 
-const ref=doc(db,"analytics","visits")
-const snap=await getDoc(ref)
+/* TICKET STATUS UPDATE */
 
-if(snap.exists()){
-await updateDoc(ref,{count:increment(1)})
-visitors.innerText=snap.data().count+1
-}else{
-await setDoc(ref,{count:1})
-visitors.innerText=1
-}
+window.updateTicket = async function(id,status){
 
-}
+const ref = doc(db,"tickets",id);
 
-trackVisit()
+await updateDoc(ref,{
+status:status
+});
 
-window.renderChart=function(){
-
-new Chart(document.getElementById("chart"),{
-
-type:"bar",
-
-data:{
-labels:["Orders","Tickets","Revenue"],
-datasets:[{
-data:[
-parseInt(orderCount.innerText),
-parseInt(ticketCount.innerText),
-parseFloat(revenue.innerText)
-]
-}]
-}
-
-})
-
-}
+};
 
 </script>
-
 </body>
 </html>
