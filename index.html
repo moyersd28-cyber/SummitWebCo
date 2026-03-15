@@ -219,8 +219,10 @@ footer {
 
 <script type="module">
 
+<script type="module">
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import {
+import { 
 getFirestore,
 doc,
 getDoc,
@@ -230,12 +232,12 @@ increment
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCSBbgbEqdwm4WthtcaeMx54HNvTStsHIg",
-  authDomain: "summit-web-co.firebaseapp.com",
-  projectId: "summit-web-co",
-  storageBucket: "summit-web-co.firebasestorage.app",
-  messagingSenderId: "532909980411",
-  appId: "1:532909980411:web:f78f28e2390027b8a38e5e"
+apiKey: "AIzaSyCSBbgbEqdwm4WthtcaeMx54HNvTStsHIg",
+authDomain: "summit-web-co.firebaseapp.com",
+projectId: "summit-web-co",
+storageBucket: "summit-web-co.firebasestorage.app",
+messagingSenderId: "532909980411",
+appId: "1:532909980411:web:f78f28e2390027b8a38e5e"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -243,24 +245,37 @@ const db = getFirestore(app);
 
 async function trackVisit(){
 
-const ref = doc(db,"analytics","visits");
-const snap = await getDoc(ref);
+const visitRef = doc(db,"analytics","visits");
+
+const snap = await getDoc(visitRef);
 
 if(snap.exists()){
-await updateDoc(ref,{count: increment(1)});
+
+await updateDoc(visitRef,{
+count: increment(1)
+});
+
 }else{
-await setDoc(ref,{count:1});
-}
+
+await setDoc(visitRef,{
+count:1
+});
 
 }
 
-/* ONLY COUNT ONCE PER SESSION */
+}
 
-if(!sessionStorage.getItem("siteVisited")){
+/* COUNT ONLY ONCE PER SESSION */
+
+if(!sessionStorage.getItem("visited")){
+
 trackVisit();
-sessionStorage.setItem("siteVisited","true");
+
+sessionStorage.setItem("visited","true");
+
 }
 
+</script>
 </script>
     
 </script>
