@@ -217,8 +217,9 @@ footer {
 
   <script type="module">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+<script type="module">
 
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import {
 getFirestore,
 doc,
@@ -243,34 +244,24 @@ const db = getFirestore(app);
 async function trackVisit(){
 
 const ref = doc(db,"analytics","visits");
-
 const snap = await getDoc(ref);
 
 if(snap.exists()){
-
-await updateDoc(ref,{
-count: increment(1)
-});
-
+await updateDoc(ref,{count: increment(1)});
 }else{
-
-await setDoc(ref,{
-count:1
-});
-
+await setDoc(ref,{count:1});
 }
 
 }
 
+/* ONLY COUNT ONCE PER SESSION */
+
+if(!sessionStorage.getItem("siteVisited")){
 trackVisit();
-
-    if(!sessionStorage.getItem("visited")){
-
-trackVisit()
-
-sessionStorage.setItem("visited","true")
-
+sessionStorage.setItem("siteVisited","true");
 }
+
+</script>
     
 </script>
   
