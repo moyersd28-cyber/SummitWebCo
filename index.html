@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="icon" href="/SummitWebCo/favicon.ico" type="image/x-icon">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="shortcut icon" href="/favicon.ico">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Summit Web Co. | Professional Web Design</title>
@@ -214,50 +215,6 @@ footer {
 
 </style>
 </head>
-
-<script type="module">
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCSBbgbEqdwm4WthtcaeMx54HNvTStsHIg",
-  authDomain: "summit-web-co.firebaseapp.com",
-  projectId: "summit-web-co",
-  storageBucket: "summit-web-co.firebasestorage.app",
-  messagingSenderId: "532909980411",
-  appId: "1:532909980411:web:f78f28e2390027b8a38e5e"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-async function trackVisit(){
-
-  const visitRef = doc(db,"analytics","visits");
-
-  const snap = await getDoc(visitRef);
-
-  if(!sessionStorage.getItem("visited")){
-
-    if(snap.exists()){
-      await updateDoc(visitRef,{count: increment(1)});
-    }else{
-      await setDoc(visitRef,{count:1});
-    }
-
-    sessionStorage.setItem("visited","true");
-
-  }
-
-}
-
-trackVisit();
-
-</script>
-    
-</script>
-  
 <body>
 
 <nav>
@@ -356,8 +313,10 @@ window.onload = typeEffect;
 </script>
 
 <footer>
-  <a href="adminpage.html" class="footer-admin" title="Admin Panel"></a>
+  <a href="secure-access.html" class="footer-admin" title="Admin Panel"></a>
 </footer>
 
 </body>
 </html>
+
+
