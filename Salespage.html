@@ -282,6 +282,7 @@ footer {
 </div>
 
 </div>
+</section>
 
 <p style="
   width: 100%;
@@ -338,7 +339,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// FORM SUBMISSION
 const form = document.getElementById("orderForm");
 
 form.addEventListener("submit", async (e) => {
@@ -349,13 +349,23 @@ form.addEventListener("submit", async (e) => {
   const packageType = document.getElementById("packageSelect").value;
   const details = document.getElementById("projectDetails").value;
 
-await addDoc(collection(db, "orders"), {
-  name: name,
-  email: email,
-  service: packageType,
-  details: details,
-  status: "New",
-  created: serverTimestamp()
+  try {
+    await addDoc(collection(db, "orders"), {
+      name: name,
+      email: email,
+      service: packageType,
+      details: details,
+      status: "New",
+      created: serverTimestamp()
+    });
+
+    alert("Your project request has been submitted successfully.");
+    form.reset();
+
+  } catch (error) {
+    console.error("Error:", error);
+    alert("There was an issue submitting your request.");
+  }
 });
 </script>
 
