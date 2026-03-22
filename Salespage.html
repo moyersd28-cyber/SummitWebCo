@@ -190,7 +190,7 @@ footer {
       <li>Basic Pages</li>
       <li>Simple Layout</li>
     </ul>
-    <a href="#order" class="btn">Get Started</a>
+    <a href="#order" class="btn" data-service="Basic Website">Get Started</a>
   </div>
 
   <div class="price-card">
@@ -205,7 +205,7 @@ footer {
       <li>Better Performance</li>
       <li>Mobile Friendly</li>
     </ul>
-    <a href="#order" class="btn">Choose Advanced</a>
+    <a href="#order" class="btn" data-service="Advanced Website">Advance Your Site</a>
   </div>
 
   <div class="price-card">
@@ -221,7 +221,7 @@ footer {
       <li>Mobile Friendly</li>
       <li>Custom Styling</li>
     </ul>
-    <a href="#order" class="btn">Go Pro</a>
+    <a href="#order" class="btn" data-service="Pro Website">Go Pro</a>
   </div>
 
   <div class="price-card">
@@ -235,7 +235,7 @@ footer {
       <li>Role Structure</li>
       <li>Clean Layout</li>
     </ul>
-    <a href="#order" class="btn">Order Now</a>
+    <a href="#order" class="btn" data-service="Discord Design">Order A Design</a>
   </div>
 
   <div class="price-card">
@@ -249,7 +249,7 @@ footer {
       <li>Commands</li>
       <li>Custom Features</li>
     </ul>
-    <a href="#order" class="btn">Get Bot</a>
+    <a href="#order" class="btn" data-service="Discord Bot Design">Get A Bot</a>
   </div>
 
   <div class="price-card">
@@ -263,7 +263,7 @@ footer {
       <li>Custom Features</li>
       <li>Performance Focused</li>
     </ul>
-    <a href="#order" class="btn">Request</a>
+    <a href="#order" class="btn" data-service="Video Game Codes">Request Code</a>
   </div>
 
 <div class="price-card">
@@ -278,7 +278,7 @@ footer {
     <li>Security Monitoring</li>
     <li>Priority Support</li>
   </ul>
-  <a href="#order" class="btn">Get Support</a>
+  <a href="#order" class="btn" data-service=”Maintenance Services”>Get Website/Code Support</a>
 </div>
 
 </div>
@@ -299,7 +299,7 @@ footer {
     <h2 class="section-title">Start Your Project</h2>
     <form id="orderForm">
       <input type="text" id="clientName" placeholder="Full Name" required>
-      <input type="email" id="clientEmail" placeholder="Email Address" required>
+      <input type="contact" id="clientContact" placeholder="How Can We Contact You?" required>
 
       <select id="packageSelect" required>
   <option value="">Select Service</option>
@@ -309,9 +309,10 @@ footer {
   <option>Discord Design</option>
   <option>Discord Bot Design</option>
   <option>Video Game Codes</option>
+  <option>Maintenance Services</option>
 </select>
 
-      <textarea id="projectDetails" placeholder="Tell us about your project..."></textarea>
+      <textarea id="projectDetails" placeholder="Tell us everything we should know about your project..."></textarea>
 
       <button class="btn" type="submit">Submit Request</button>
     </form>
@@ -345,14 +346,14 @@ form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const name = document.getElementById("clientName").value;
-  const email = document.getElementById("clientEmail").value;
+  const contact = document.getElementById("clientContact").value;
   const packageType = document.getElementById("packageSelect").value;
   const details = document.getElementById("projectDetails").value;
 
   try {
     await addDoc(collection(db, "orders"), {
       name: name,
-      email: email,
+      contact: contact,
       service: packageType,
       details: details,
       status: "New",
@@ -367,6 +368,21 @@ form.addEventListener("submit", async (e) => {
     alert("There was an issue submitting your request.");
   }
 });
+
+document.querySelectorAll(".price-card .btn").forEach(button => {
+  button.addEventListener("click", () => {
+    const selectedService = button.getAttribute("data-service");
+    const dropdown = document.getElementById("packageSelect");
+
+    dropdown.value = selectedService;
+
+    // Optional: scroll smooth + focus
+    setTimeout(() => {
+      dropdown.focus();
+    }, 300);
+  });
+});
+
 </script>
 
 </body>
