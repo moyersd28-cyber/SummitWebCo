@@ -1,18 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="icon" type="image/x-icon" href="/favicon.ico">
-<link rel="shortcut icon" href="/favicon.ico">
+<link rel="icon" href="/SummitWebCo/favicon.ico" type="image/x-icon">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Summit Web Co. | Professional Web Design</title>
+<title>Summit Web Co. | Pricing</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
-html {
-  scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
 * {
   margin: 0;
@@ -33,14 +30,9 @@ body {
   margin: auto;
 }
 
-/* Navigation */
 nav {
-  position: fixed;
-  width: 100%;
   background: #0f172a;
   padding: 1rem 0;
-  z-index: 1000;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
 nav .container {
@@ -50,68 +42,23 @@ nav .container {
 }
 
 nav h1 {
-  color: #ffffff;
-  font-weight: 700;
+  color: white;
   font-size: 1.5rem;
-}
-
-nav ul {
-  list-style: none;
-  display: flex;
-  gap: 2rem;
 }
 
 nav a {
   color: #cbd5e1;
+  margin-left: 2rem;
   text-decoration: none;
   font-weight: 500;
-  transition: 0.3s;
 }
 
 nav a:hover {
   color: #38bdf8;
 }
 
-/* Hero */
-.hero {
-  height: 100vh;
-  background: linear-gradient(to right, #0f172a, #1e293b);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: white;
-  padding: 0 20px;
-}
-
-.hero h2 {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-}
-
-.hero p {
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
-  color: #cbd5e1;
-}
-
-.btn {
-  padding: 0.8rem 2rem;
-  background: #38bdf8;
-  color: #0f172a;
-  border-radius: 6px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: 0.3s;
-}
-
-.btn:hover {
-  background: #0ea5e9;
-}
-
-/* Sections */
 section {
-  padding: 6rem 0;
+  padding: 5rem 0;
 }
 
 .section-title {
@@ -122,97 +69,89 @@ section {
   color: #0f172a;
 }
 
-/* About */
-.about p {
-  max-width: 800px;
-  margin: auto;
-  text-align: center;
-  font-size: 1.1rem;
-  color: #475569;
-}
+/* Pricing Cards */
 
-/* Services */
-.services-grid {
+.pricing-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 2rem;
 }
 
-.service-card {
-  padding: 2rem;
+.price-card {
   background: #f8fafc;
+  padding: 2rem;
   border-radius: 8px;
-  transition: 0.3s;
   text-align: center;
+  transition: 0.3s;
 }
 
-.service-card:hover {
+.price-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 25px rgba(0,0,0,0.08);
 }
 
-.service-card h4 {
+.price-card h3 {
   margin-bottom: 1rem;
+}
+
+.price {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
   color: #0f172a;
 }
 
-/* Why Choose Us */
-.why {
-  background: #f1f5f9;
+.price-card ul {
+  list-style: none;
+  margin-bottom: 2rem;
 }
 
-.why ul {
+.price-card li {
+  margin: 0.5rem 0;
+}
+
+.btn {
+  padding: 0.7rem 1.8rem;
+  background: #38bdf8;
+  color: #0f172a;
+  border-radius: 6px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  background: #0ea5e9;
+}
+
+/* Order Form */
+
+form {
   max-width: 700px;
   margin: auto;
-  list-style: none;
 }
 
-.why li {
-  padding: 1rem 0;
-  font-size: 1.1rem;
-  border-bottom: 1px solid #e2e8f0;
+input, select, textarea {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1.2rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-family: inherit;
 }
 
-/* CTA */
-.cta {
-  background: #0f172a;
-  color: white;
-  text-align: center;
+textarea {
+  resize: vertical;
+  min-height: 120px;
 }
 
-.cta h3 {
-  margin-bottom: 1rem;
-  font-size: 2rem;
-}
-
-/* Admin Button*/
 footer {
-  background: #0f172a;     /* navy footer background */
+  background: #020617;
   color: #94a3b8;
   text-align: center;
   padding: 2rem 0;
   font-size: 0.9rem;
-  position: relative;      /* needed for absolutely positioning the button inside */
 }
-
-.footer-admin {
-  position: absolute;
-  bottom: 8px;             /* inside the footer padding */
-  right: 16px;             /* small distance from right edge */
-  width: 16px;             /* small & discreet */
-  height: 16px;            /* small square */
-  background: #2563eb;     /* accent color matching buttons */
-  border-radius: 4px;      /* subtle rounding */
-  opacity: 0.3;            /* very subtle */
-  transition: opacity 0.3s, background 0.3s;
-  cursor: pointer;
-}
-
-.footer-admin:hover {
-  opacity: 1;
-  background: #38bdf8;     /* slightly brighter on hover */
-}
-
 </style>
 </head>
 <body>
@@ -220,103 +159,205 @@ footer {
 <nav>
   <div class="container">
     <h1>Summit Web Co.</h1>
-    <ul>
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">Services</a></li>
-      <li><a href="#why">Why Us</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </div>
-</nav>
-
-<section class="hero">
-  <div>
-    <h2 id="typing"></h2>
-    <p>Build your dream website for low a low price. Summit Web Co. The peak of web design.</p>
-    <a href="Salespage.html" class="btn">Start Your Project</a>
-  </div>
-</section>
-
-<section id="about" class="about">
-  <div class="container">
-    <h3 class="section-title">About Summit Web Co.</h3>
-    <p>
-      Summit Web Co. is dedicated to creating professional, high-performing websites for businesses
-      that want to stand out. Our team combines strategy, design, and development to deliver digital
-      experiences that reflect your brand and produce real results.
-    </p>
-  </div>
-</section>
-
-<section id="services">
-  <div class="container">
-    <h3 class="section-title">Our Services</h3>
-    <div class="services-grid">
-      <div class="service-card">
-        <h4>Custom Website Design</h4>
-        <p>Professional, responsive websites tailored to your brand identity.</p>
-      </div>
-      <div class="service-card">
-        <h4>Web Development</h4>
-        <p>Clean, scalable code built for performance and reliability.</p>
-      </div>
-      <div class="service-card">
-        <h4>SEO Optimization</h4>
-        <p>Strategic search optimization to increase visibility and traffic.</p>
-      </div>
-      <div class="service-card">
-        <h4>Ongoing Support</h4>
-        <p>Maintenance and updates to keep your website secure and optimized.</p>
+    <div>
+      <div>
+        <a href="index.html">Home</a>
+        <a href="Salespage.html">Pricing</a>
+        <a href="csp.html">Contact</a>
       </div>
     </div>
   </div>
-</section>
+</nav>
 
-<section id="why" class="why">
+<section>
   <div class="container">
-    <h3 class="section-title">Why Choose Us</h3>
+    <h2 class="section-title">Transparent Website Packages</h2>
+    <p style="text-align:center; max-width:750px; margin:0 auto 3rem auto; color:#475569;">
+      At Summit Web Co., we believe professional web design should be accessible. 
+      Our pricing is simple, transparent, and designed to give businesses a strong digital foundation without unnecessary costs.
+    </p>
+
+    <div class="pricing-grid">
+
+  <div class="price-card">
+    <h3>Basic Website</h3>
+    <div class="price">$5</div>
+    <p style="margin-bottom:1.5rem; color:#475569;">
+      A clean and simple website for individuals or small projects.
+    </p>
     <ul>
-      <li>✔ Strategic, business-focused design</li>
-      <li>✔ Transparent communication and collaboration</li>
-      <li>✔ Modern, scalable technology</li>
-      <li>✔ Long-term partnership approach</li>
+      <li>Responsive Design</li>
+      <li>Basic Pages</li>
+      <li>Simple Layout</li>
     </ul>
+    <a href="#order" class="btn">Get Started</a>
   </div>
-</section>
 
-<section id="contact" class="cta">
+  <div class="price-card">
+    <h3>Advanced Website</h3>
+    <div class="price">$10</div>
+    <p style="margin-bottom:1.5rem; color:#475569;">
+      More features and customization for growing needs.
+    </p>
+    <ul>
+      <li>More Pages</li>
+      <li>Custom Styling</li>
+      <li>Better Performance</li>
+      <li>Mobile Friendly</li>
+    </ul>
+    <a href="#order" class="btn">Choose Advanced</a>
+  </div>
+
+  <div class="price-card">
+    <h3>Pro Website</h3>
+    <div class="price">$15</div>
+    <p style="margin-bottom:1.5rem; color:#475569;">
+      High-end, fully customized professional websites.
+    </p>
+    <ul>
+      <li>Full Custom Design</li>
+      <li>Advanced Features</li>
+      <li>Optimized Performance</li>
+      <li>Mobile Friendly</li>
+      <li>Custom Styling</li>
+    </ul>
+    <a href="#order" class="btn">Go Pro</a>
+  </div>
+
+  <div class="price-card">
+    <h3>Discord Design</h3>
+    <div class="price">$5</div>
+    <p style="margin-bottom:1.5rem; color:#475569;">
+      Professionally structured Discord servers.
+    </p>
+    <ul>
+      <li>Channel Setup</li>
+      <li>Role Structure</li>
+      <li>Clean Layout</li>
+    </ul>
+    <a href="#order" class="btn">Order Now</a>
+  </div>
+
+  <div class="price-card">
+    <h3>Discord Bot Design</h3>
+    <div class="price">$10</div>
+    <p style="margin-bottom:1.5rem; color:#475569;">
+      Custom bots tailored to your server’s needs.
+    </p>
+    <ul>
+      <li>Automation</li>
+      <li>Commands</li>
+      <li>Custom Features</li>
+    </ul>
+    <a href="#order" class="btn">Get Bot</a>
+  </div>
+
+  <div class="price-card">
+    <h3>Video Game Codes</h3>
+    <div class="price">$20</div>
+    <p style="margin-bottom:1.5rem; color:#475569;">
+      Custom scripts and code solutions for games.
+    </p>
+    <ul>
+      <li>Game Scripts</li>
+      <li>Custom Features</li>
+      <li>Performance Focused</li>
+    </ul>
+    <a href="#order" class="btn">Request</a>
+  </div>
+
+<div class="price-card">
+  <h3>Maintenance Services</h3>
+  <div class="price">$5 / Month</div>
+  <p style="margin-bottom:1.5rem; color:#475569;">
+    Keep your website running smoothly with ongoing support, updates, and performance monitoring.
+  </p>
+  <ul>
+    <li>Website Updates & Edits</li>
+    <li>Performance Optimization</li>
+    <li>Security Monitoring</li>
+    <li>Priority Support</li>
+  </ul>
+  <a href="#order" class="btn">Get Support</a>
+</div>
+
+</div>
+
+<p style="
+  width: 100%;
+  text-align: center;
+  margin: 3rem 0 0 0;
+  color: #64748b;
+  font-size: 0.95rem;
+">
+  *Domain registration fees are the responsibility of the customer and are billed seperatley after the purchase of Summit's services.
+</p>
+
+<section id="order">
   <div class="container">
-    <h3>Ready to Elevate Your Online Presence?</h3>
-    <p>Let’s build greatness together together.</p>
-    <br>
-    <a href="csp.html" class="btn">Contact Us</a>
+    <h2 class="section-title">Start Your Project</h2>
+    <form id="orderForm">
+      <input type="text" id="clientName" placeholder="Full Name" required>
+      <input type="email" id="clientEmail" placeholder="Email Address" required>
+
+      <select id="packageSelect" required>
+  <option value="">Select Service</option>
+  <option>Basic Website</option>
+  <option>Advanced Website</option>
+  <option>Pro Website</option>
+  <option>Discord Design</option>
+  <option>Discord Bot Design</option>
+  <option>Video Game Codes</option>
+</select>
+
+      <textarea id="projectDetails" placeholder="Tell us about your project..."></textarea>
+
+      <button class="btn" type="submit">Submit Request</button>
+    </form>
   </div>
 </section>
 
-<footer>
+<footer class="swc-footer">
   © 2026 Summit Web Co. All Rights Reserved.
 </footer>
 
-<script>
-const text = "Elevate Your Digital Presence.";
-let index = 0;
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-function typeEffect() {
-  if (index < text.length) {
-    document.getElementById("typing").innerHTML += text.charAt(index);
-    index++;
-    setTimeout(typeEffect, 60);
-  }
-}
+const firebaseConfig = {
+  apiKey: "AIzaSyCSBbgbEqdwm4WthtcaeMx54HNvTStsHIg",
+  authDomain: "summit-web-co.firebaseapp.com",
+  projectId: "summit-web-co",
+  storageBucket: "summit-web-co.firebasestorage.app",
+  messagingSenderId: "532909980411",
+  appId: "1:532909980411:web:f78f28e2390027b8a38e5e"
+};
 
-window.onload = typeEffect;
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// FORM SUBMISSION
+const form = document.getElementById("orderForm");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const name = document.getElementById("clientName").value;
+  const email = document.getElementById("clientEmail").value;
+  const packageType = document.getElementById("packageSelect").value;
+  const details = document.getElementById("projectDetails").value;
+
+await addDoc(collection(db, "orders"), {
+  name: name,
+  email: email,
+  service: packageType,
+  details: details,
+  status: "New",
+  created: serverTimestamp()
+});
 </script>
-
-<footer>
-  <a href="secure-access.html" class="footer-admin" title="Admin Panel"></a>
-</footer>
 
 </body>
 </html>
-
-
