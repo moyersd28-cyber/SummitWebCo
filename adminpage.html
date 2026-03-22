@@ -1,401 +1,291 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Summit Web Co | Admin Dashboard</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Summit Admin Panel V5</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
-
-body{
-margin:0;
-font-family:Segoe UI;
-background:#0f172a;
-color:white;
+body {
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  background: #0f172a;
+  color: white;
 }
 
-.navbar{
-width:100%;
-background:#1e293b;
-padding:12px;
-display:flex;
-justify-content:space-between;
-position:fixed;
-top:0;
+header {
+  padding: 1rem;
+  background: #020617;
+  text-align: center;
+  font-weight: 600;
 }
 
-.navbar a{
-color:white;
-text-decoration:none;
-margin:0 15px;
+.container {
+  padding: 2rem;
 }
 
-.sidebar{
-width:230px;
-height:100vh;
-background:#1e293b;
-position:fixed;
-top:50px;
-padding-top:20px;
+/* LOGIN */
+#login {
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
 }
 
-.sidebar button{
-width:100%;
-background:none;
-border:none;
-color:white;
-padding:15px;
-text-align:left;
-cursor:pointer;
+.login-box {
+  background: #1e293b;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 300px;
+  text-align: center;
 }
 
-.main{
-margin-left:230px;
-margin-top:60px;
-padding:20px;
+/* INPUTS */
+input {
+  padding: 0.7rem;
+  width: 100%;
+  margin-bottom: 1rem;
+  border-radius: 6px;
+  border: none;
 }
 
-.card{
-background:#1e293b;
-padding:20px;
-border-radius:10px;
-margin:10px;
-display:inline-block;
-width:200px;
-text-align:center;
+button {
+  padding: 0.6rem 1.2rem;
+  background: #38bdf8;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 0.5rem;
 }
 
-ul{
-list-style:none;
-padding:0;
+/* DASHBOARD */
+.dashboard {
+  display: none;
 }
 
-li{
-background:#1e293b;
-padding:10px;
-margin:6px 0;
-border-radius:6px;
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 1.5rem;
 }
 
-.hidden{
-display:none;
+.card {
+  background: #1e293b;
+  padding: 1.5rem;
+  border-radius: 10px;
 }
 
-.statusBtn{
-margin-top:6px;
-padding:6px 10px;
-border:none;
-border-radius:4px;
-cursor:pointer;
-background:#2563eb;
-color:white;
+/* ITEMS */
+.item {
+  background: #020617;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 6px;
 }
 
+.status-new { color: #38bdf8; }
+.status-progress { color: #facc15; }
+.status-done { color: #22c55e; }
+
+.actions {
+  margin-top: 0.5rem;
+}
+
+.actions button {
+  background: #ef4444;
+  margin-right: 0.5rem;
+}
+
+select {
+  margin-top: 0.5rem;
+  padding: 0.4rem;
+}
+
+.empty {
+  opacity: 0.6;
+}
+
+/* SEARCH */
+.search {
+  margin-bottom: 1rem;
+}
 </style>
 </head>
 
 <body>
 
-<div id="loginScreen" style="
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:#0f172a;
-display:flex;
-justify-content:center;
-align-items:center;
-z-index:9999;
-">
-
-<div style="
-background:#1e293b;
-padding:40px;
-border-radius:12px;
-text-align:center;
-width:320px;
-">
-
-<h2>Admin Access</h2>
-
-<input id="adminPass" type="password" placeholder="Enter Passcode"
-style="width:100%;padding:10px;margin-top:15px;border:none;border-radius:6px">
-
-<button onclick="checkPass()"
-style="margin-top:15px;padding:10px 20px;border:none;border-radius:6px;background:#2563eb;color:white;cursor:pointer">
-Unlock
-</button>
-
-<p id="loginError" style="color:red"></p>
-
-<script>
-document.getElementById("adminPass").addEventListener("keydown",function(e){
-
-if(e.key==="Enter"){
-checkPass();
-}
-
-});
-</script>
-</div>
+<!-- LOGIN -->
+<div id="login">
+  <div class="login-box">
+    <h2>Admin Access</h2>
+    <input type="password" id="passcode" placeholder="Enter Passcode">
+    <button onclick="login()">Enter</button>
+  </div>
 </div>
 
-<div class="navbar">
+<!-- DASHBOARD -->
+<div class="dashboard" id="dashboard">
+  <header>Summit Web Co. Admin Panel V5</header>
 
-<a href="index.html">Main Site</a>
+  <div class="container">
+    <div class="grid">
 
+      <!-- ORDERS -->
+      <div class="card">
+        <h3>Orders</h3>
+        <input class="search" id="orderSearch" placeholder="Search orders...">
+        <div id="ordersList"></div>
+      </div>
+
+      <!-- TICKETS -->
+      <div class="card">
+        <h3>Tickets</h3>
+        <input class="search" id="ticketSearch" placeholder="Search tickets...">
+        <div id="ticketsList"></div>
+      </div>
+
+      <!-- ANALYTICS -->
+      <div class="card">
+        <h3>Analytics</h3>
+        <p>Total Orders: <span id="orderCount">0</span></p>
+        <p>Completed Orders: <span id="completedCount">0</span></p>
+        <p>Total Tickets: <span id="ticketCount">0</span></p>
+      </div>
+
+    </div>
+  </div>
 </div>
-
-<div><strong>Summit Admin</strong></div>
-
-<div class="sidebar">
-<button onclick="view('dashboard')">Dashboard</button>
-<button onclick="view('orders')">Orders</button>
-<button onclick="view('tickets')">Tickets</button>
-<button onclick="view('analytics')">Analytics</button>
-</div>
-
-<div class="main">
-
-<div id="dashboard">
-
-<h1>Dashboard</h1>
-
-<div class="card">
-Orders<br>
-<span id="orderCount">0</span>
-</div>
-
-<div class="card">
-Tickets<br>
-<span id="ticketCount">0</span>
-</div>
-
-<div class="card">
-Revenue<br>
-$<span id="revenue">0</span>
-</div>
-
-<div class="card">
-Visitors<br>
-<span id="visitors">0</span>
-</div>
-
-</div>
-
-<div id="orders" class="hidden">
-<h2>Orders</h2>
-<ul id="orderList"></ul>
-</div>
-
-<div id="tickets" class="hidden">
-<h2>Tickets</h2>
-<ul id="ticketList"></ul>
-</div>
-
-<div id="analytics" class="hidden">
-<h2>Analytics</h2>
-<canvas id="chart"></canvas>
-</div>
-
-</div>
-
-<script>
-
-function view(section){
-
-["dashboard","orders","tickets","analytics"].forEach(id=>{
-document.getElementById(id).classList.add("hidden")
-})
-
-document.getElementById(section).classList.remove("hidden")
-
-if(section==="analytics") renderChart()
-
-}
-
-</script>
 
 <script type="module">
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-
-import {
-getFirestore,
-collection,
-query,
-orderBy,
-onSnapshot,
-doc,
-updateDoc,
-getDoc,
-setDoc,
-increment
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, onSnapshot, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
-apiKey: "AIzaSyCSBbgbEqdwm4WthtcaeMx54HNvTStsHIg",
-authDomain: "summit-web-co.firebaseapp.com",
-projectId: "summit-web-co",
-storageBucket: "summit-web-co.firebasestorage.app",
-messagingSenderId: "532909980411",
-appId: "1:532909980411:web:f78f28e2390027b8a38e5e"
+  apiKey: "AIzaSyCSBbgbEqdwm4WthtcaeMx54HNvTStsHIg",
+  authDomain: "summit-web-co.firebaseapp.com",
+  projectId: "summit-web-co",
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-let revenueTotal = 0
+// LOGIN
+window.login = function () {
+  if (document.getElementById("passcode").value === "ThePeak2026") {
+    document.getElementById("login").style.display = "none";
+    document.getElementById("dashboard").style.display = "block";
+    loadOrders();
+    loadTickets();
+  } else {
+    alert("Wrong passcode");
+  }
+};
 
-const orderQuery = query(collection(db,"orders"),orderBy("createdAt","desc"))
-
-onSnapshot(orderQuery,(snapshot)=>{
-
-orderList.innerHTML=""
-revenueTotal=0
-
-snapshot.forEach(docSnap=>{
-
-const data=docSnap.data()
-const id=docSnap.id
-
-revenueTotal+=data.price||0
-
-orderList.innerHTML+=`
-<li>
-<strong>${data.name||"Customer"}</strong><br>
-Package: ${data.package||"Unknown"}<br>
-Email: ${data.email||"None"}<br>
-Price: $${data.price||0}<br>
-Status: ${data.status||"Pending"}<br>
-
-<button class="statusBtn" onclick="updateOrder('${id}','Pending')">Pending</button>
-<button class="statusBtn" onclick="updateOrder('${id}','In Progress')">In Progress</button>
-<button class="statusBtn" onclick="updateOrder('${id}','Completed')">Completed</button>
-
-</li>
-`
-
-})
-
-orderCount.innerText=snapshot.size
-revenue.innerText=revenueTotal.toFixed(2)
-
-})
-
-window.updateOrder=async function(id,status){
-await updateDoc(doc(db,"orders",id),{status:status})
-}
-
-const ticketQuery=query(collection(db,"tickets"),orderBy("createdAt","desc"))
-
-onSnapshot(ticketQuery,(snapshot)=>{
-
-ticketList.innerHTML=""
-
-snapshot.forEach(docSnap=>{
-
-const data=docSnap.data()
-const id=docSnap.id
-
-ticketList.innerHTML+=`
-<li>
-<strong>${data.name||"User"}</strong><br>
-${data.description||data.msg||""}<br>
-Status: ${data.status||"Open"}<br>
-
-<button class="statusBtn" onclick="updateTicket('${id}','Open')">Open</button>
-<button class="statusBtn" onclick="updateTicket('${id}','Working')">Working</button>
-<button class="statusBtn" onclick="updateTicket('${id}','Closed')">Closed</button>
-
-</li>
-`
-
-})
-
-ticketCount.innerText=snapshot.size
-
-})
-
-window.updateTicket=async function(id,status){
-await updateDoc(doc(db,"tickets",id),{status:status})
-}
-
-/* VISITOR COUNTER (READ ONLY FOR ADMIN) */
-
-import { onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-const visitRef = doc(db,"analytics","visits");
-
-onSnapshot(visitRef,(snap)=>{
-
-if(snap.exists()){
-
-visitors.innerText = snap.data().count;
-
-}else{
-
-visitors.innerText = 0;
-
-}
-
+document.getElementById("passcode").addEventListener("keypress", function(e) {
+  if (e.key === "Enter") {
+    login();
+  }
 });
 
-window.renderChart=function(){
+// LOAD ORDERS
+function loadOrders() {
+  const list = document.getElementById("ordersList");
+  const search = document.getElementById("orderSearch");
 
-new Chart(document.getElementById("chart"),{
+  onSnapshot(collection(db, "orders"), (snapshot) => {
+    let completed = 0;
+    list.innerHTML = "";
 
-type:"bar",
+    document.getElementById("orderCount").textContent = snapshot.size;
 
-data:{
-labels:["Orders","Tickets","Revenue"],
-datasets:[{
-data:[
-parseInt(orderCount.innerText),
-parseInt(ticketCount.innerText),
-parseFloat(revenue.innerText)
-]
-}]
+    snapshot.forEach((docSnap) => {
+      const data = docSnap.data();
+
+      if (data.status === "Completed") completed++;
+
+      if (search.value && !data.name?.toLowerCase().includes(search.value.toLowerCase())) return;
+
+      const div = document.createElement("div");
+      div.className = "item";
+
+      const statusClass =
+        data.status === "Completed" ? "status-done" :
+        data.status === "In Progress" ? "status-progress" : "status-new";
+
+      div.innerHTML = `
+        <strong>${data.name}</strong><br>
+        ${data.email}<br>
+        ${data.service}<br>
+        <span class="${statusClass}">${data.status}</span>
+
+        <br>
+        <select onchange="updateStatus('${docSnap.id}', this.value)">
+          <option>New</option>
+          <option>In Progress</option>
+          <option>Completed</option>
+        </select>
+
+        <div class="actions">
+          <button onclick="deleteOrder('${docSnap.id}')">Delete</button>
+        </div>
+      `;
+
+      list.appendChild(div);
+    });
+
+    document.getElementById("completedCount").textContent = completed;
+  });
 }
 
-})
+// LOAD TICKETS
+function loadTickets() {
+  const list = document.getElementById("ticketsList");
 
+  onSnapshot(collection(db, "tickets"), (snapshot) => {
+    list.innerHTML = "";
+    document.getElementById("ticketCount").textContent = snapshot.size;
+
+    snapshot.forEach((docSnap) => {
+      const data = docSnap.data();
+
+      const div = document.createElement("div");
+      div.className = "item";
+
+      div.innerHTML = `
+        <strong>${data.name}</strong><br>
+        ${data.email}<br>
+        ${data.issue}<br>
+
+        <select onchange="updateTicket('${docSnap.id}', this.value)">
+          <option>Open</option>
+          <option>Resolved</option>
+        </select>
+
+        <div class="actions">
+          <button onclick="deleteTicket('${docSnap.id}')">Delete</button>
+        </div>
+      `;
+
+      list.appendChild(div);
+    });
+  });
 }
 
-</script>
+// UPDATE
+window.updateStatus = (id, status) =>
+  updateDoc(doc(db, "orders", id), { status });
 
-<script>
+window.updateTicket = (id, status) =>
+  updateDoc(doc(db, "tickets", id), { status });
 
-const ADMIN_PASS = "SummitAdmin2026";
+// DELETE
+window.deleteOrder = (id) =>
+  deleteDoc(doc(db, "orders", id));
 
-function checkPass(){
-
-let pass = document.getElementById("adminPass").value;
-
-if(pass === ADMIN_PASS){
-
-sessionStorage.setItem("adminAccess","true");
-
-document.getElementById("loginScreen").style.display="none";
-
-}else{
-
-document.getElementById("loginError").innerText="Incorrect Passcode";
-
-}
-
-}
-
-
-/* Keep admin logged in until tab closes */
-
-if(sessionStorage.getItem("adminAccess") === "true"){
-
-document.getElementById("loginScreen").style.display="none";
-
-}
-
+window.deleteTicket = (id) =>
+  deleteDoc(doc(db, "tickets", id));
 </script>
 
 </body>
