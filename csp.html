@@ -366,60 +366,91 @@ button:hover {
 
 <!-- TAB + FORM LOGIC -->
 <script>
-// TAB SWITCHING
-const tabButtons = document.querySelectorAll('.tab-button');
-const tabContents = document.querySelectorAll('.tab-content');
+  // 🔹 TAB SWITCHING
+  const tabButtons = document.querySelectorAll('.tab-button');
+  const tabContents = document.querySelectorAll('.tab-content');
 
-tabButtons.forEach(btn => {
-  btn.addEventListener('click', () => {
-    tabButtons.forEach(b => b.classList.remove('active'));
-    tabContents.forEach(c => c.classList.remove('active'));
+  tabButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Remove active from all
+      tabButtons.forEach(b => b.classList.remove('active'));
+      tabContents.forEach(c => c.classList.remove('active'));
 
-    btn.classList.add('active');
-    document.getElementById(btn.dataset.tab).classList.add('active');
+      // Add active to clicked
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.tab).classList.add('active');
+    });
   });
-});
 
-// WAIT FOR FIREBASE
-function waitForFirebase() {
-  if (!window.db || !window.firebaseFunctions) {
-    setTimeout(waitForFirebase, 100);
-    return;
+  // 🔹 HANDLE FORM
+  function handleForm(formId, fieldsMap, title) {
+    document.getElementById(formId).addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const formData = {};
+      Object.keys(fieldsMap).forEach(key => {
+        formData[key] = document.getElementById(fieldsMap[key]).value;
+      });
+
+      const { collection, addDoc, serverTimestamp } = window.firebaseFunctions;
+
+      try {
+        await addDoc(collection(window.db, "tickets"), {
+          type: title,
+          fields: formData,
+          status: "open",
+          createdAt: serverTimestamp()
+        });
+
+        alert("Ticket submitted successfully!");
+        document.getElementById(formId).reset();
+      } catch (error) {
+        console.error("Firestore Error:", error);
+        alert("Ticket submission failed.");
+      }
+    });
   }
 
-  handleForm("websiteForm", {
-    "Name": "webName",
-    "Contact Information": "webEmail",
-    "Website URL": "webURL",
-    "Issue Type": "webIssue",
-    "Description": "webDesc"
-  }, "Website Issue");
+  // 🔹 WAIT FOR FIREBASE
+  function waitForFirebase() {
+    if (!window.db || !window.firebaseFunctions) {
+      setTimeout(waitForFirebase, 100);
+      return;
+    }
 
-  handleForm("billingForm", {
-    "Name": "billName",
-    "Contact Information": "billEmail",
-    "Invoice / Order Number": "invoiceNum",
-    "Payment Method": "payMethod",
-    "Issue Type": "billIssue",
-    "Description": "billDesc"
-  }, "Billing Issue");
+    handleForm("websiteForm", {
+      "Name": "webName",
+      "Contact Information": "webEmail",   // matches input ID
+      "Website URL": "webURL",
+      "Issue Type": "webIssue",
+      "Description": "webDesc"
+    }, "Website Issue");
 
-  handleForm("generalForm", {
-    "Name": "genName",
-    "Contact Information": "genEmail",
-    "Inquiry Type": "genType",
-    "Description": "genDesc"
-  }, "General Inquiry");
+    handleForm("billingForm", {
+      "Name": "billName",
+      "Contact Information": "billEmail",
+      "Invoice / Order Number": "invoiceNum",
+      "Payment Method": "payMethod",
+      "Issue Type": "billIssue",
+      "Description": "billDesc"
+    }, "Billing Issue");
 
-  handleForm("feedbackForm", {
-    "Name": "feedName",
-    "Contact Information": "feedEmail",
-    "Feedback Type": "feedType",
-    "Description": "feedDesc"
-  }, "Feedback / Suggestion");
-}
+    handleForm("generalForm", {
+      "Name": "genName",
+      "Contact Information": "genEmail",
+      "Inquiry Type": "genType",
+      "Description": "genDesc"
+    }, "General Inquiry");
 
-waitForFirebase();
+    handleForm("feedbackForm", {
+      "Name": "feedName",
+      "Contact Information": "feedEmail",
+      "Feedback Type": "feedType",
+      "Description": "feedDesc"
+    }, "Feedback / Suggestion");
+  }
+
+  waitForFirebase();
 </script>
 
 <!-- Firebase SDK -->
