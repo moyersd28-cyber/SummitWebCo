@@ -259,7 +259,7 @@ button:hover {
     <label>Full Name</label>
     <input type="text" id="webName" required>
 
-    <label>Email / Discord</label>
+    <label>Contact Information</label>
     <input type="text" id="webEmail" required>
 
     <label>Website URL</label>
@@ -287,7 +287,7 @@ button:hover {
     <label>Full Name</label>
     <input type="text" id="billName" required>
 
-    <label>Email / Discord</label>
+    <label>Contact Information</label>
     <input type="text" id="billEmail" required>
 
     <label>Invoice / Order Number</label>
@@ -318,7 +318,7 @@ button:hover {
     <label>Full Name</label>
     <input type="text" id="genName" required>
 
-    <label>Email / Discord</label>
+    <label>Contact Information</label>
     <input type="text" id="genEmail" required>
 
     <label>Inquiry Type</label>
@@ -342,7 +342,7 @@ button:hover {
     <label>Full Name</label>
     <input type="text" id="feedName" required>
 
-    <label>Email / Discord</label>
+    <label>Contact Information</label>
     <input type="text" id="feedEmail" required>
 
     <label>Feedback Type</label>
@@ -364,8 +364,9 @@ button:hover {
   © 2026 Summit Web Co. All Rights Reserved.
 </footer>
 
+<!-- TAB + FORM LOGIC -->
 <script>
-/* TAB SWITCHING */
+// TAB SWITCHING
 const tabButtons = document.querySelectorAll('.tab-button');
 const tabContents = document.querySelectorAll('.tab-content');
 
@@ -379,99 +380,46 @@ tabButtons.forEach(btn => {
   });
 });
 
-/* DISCORD WEBHOOK SCRIPT */
-const webhookURL = "YOUR_DISCORD_WEBHOOK_URL";
-
-async function sendToDiscord(payload) {
-  try {
-    const response = await fetch(webhookURL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
-    return response.ok;
-  } catch (err) {
-    console.error(err);
-    return false;
+// WAIT FOR FIREBASE
+function waitForFirebase() {
+  if (!window.db || !window.firebaseFunctions) {
+    setTimeout(waitForFirebase, 100);
+    return;
   }
+
+  handleForm("websiteForm", {
+    "Name": "webName",
+    "Contact Information": "webEmail",
+    "Website URL": "webURL",
+    "Issue Type": "webIssue",
+    "Description": "webDesc"
+  }, "Website Issue");
+
+  handleForm("billingForm", {
+    "Name": "billName",
+    "Contact Information": "billEmail",
+    "Invoice / Order Number": "invoiceNum",
+    "Payment Method": "payMethod",
+    "Issue Type": "billIssue",
+    "Description": "billDesc"
+  }, "Billing Issue");
+
+  handleForm("generalForm", {
+    "Name": "genName",
+    "Contact Information": "genEmail",
+    "Inquiry Type": "genType",
+    "Description": "genDesc"
+  }, "General Inquiry");
+
+  handleForm("feedbackForm", {
+    "Name": "feedName",
+    "Contact Information": "feedEmail",
+    "Feedback Type": "feedType",
+    "Description": "feedDesc"
+  }, "Feedback / Suggestion");
 }
 
-function handleForm(formId, fieldsMap, title) {
-  document.getElementById(formId).addEventListener("submit", async function(e) {
-    e.preventDefault();
-
-    const formData = {};
-    Object.keys(fieldsMap).forEach(key => {
-      formData[key] = document.getElementById(fieldsMap[key]).value;
-    });
-
-    // Firestore save
-    try {
-      await addDoc(collection(db, "tickets"), {
-        type: title,
-        ...formData,
-        createdAt: serverTimestamp()
-      });
-    } catch (error) {
-      console.error("Firestore Error:", error);
-    }
-
-    // Discord webhook
-    const payload = {
-      embeds: [{
-        title: `New ${title}`,
-        color: 0x0f172a,
-        fields: Object.keys(formData).map(key => ({
-          name: key,
-          value: formData[key],
-          inline: false
-        })),
-        timestamp: new Date()
-      }]
-    };
-
-    const success = await sendToDiscord(payload);
-
-    if(success) {
-      alert("Submitted successfully!");
-      document.getElementById(formId).reset();
-    } else {
-      alert("Submitted, but Discord failed.");
-    }
-  });
-}
-
-handleForm("websiteForm", {
-  "Name": "webName",
-  "Email / Discord": "webEmail",
-  "Website URL": "webURL",
-  "Issue Type": "webIssue",
-  "Description": "webDesc"
-}, "Website Issue");
-
-handleForm("billingForm", {
-  "Name": "billName",
-  "Email / Discord": "billEmail",
-  "Invoice / Order Number": "invoiceNum",
-  "Payment Method": "payMethod",
-  "Issue Type": "billIssue",
-  "Description": "billDesc"
-}, "Billing Issue");
-
-handleForm("generalForm", {
-  "Name": "genName",
-  "Email / Discord": "genEmail",
-  "Inquiry Type": "genType",
-  "Description": "genDesc"
-}, "General Inquiry");
-
-handleForm("feedbackForm", {
-  "Name": "feedName",
-  "Email / Discord": "feedEmail",
-  "Feedback Type": "feedType",
-  "Description": "feedDesc"
-}, "Feedback / Suggestion");
-
+waitForFirebase();
 </script>
 
 <!-- Firebase SDK -->
