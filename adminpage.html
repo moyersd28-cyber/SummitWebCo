@@ -168,36 +168,38 @@ document.getElementById("passcode").addEventListener("keypress", function(e) {
   if (e.key === "Enter") login();
 });
 
-// LOAD ORDERS
 function loadOrders() {
   const ordersList = document.getElementById("ordersList");
   const search = document.getElementById("orderSearch");
 
-  onSnapshot(collection(db, "orders"), (snapshot) => {
+  onSnapshot(collection(db, "orders"), snapshot => {
     ordersList.innerHTML = "";
     let completed = 0;
     document.getElementById("orderCount").textContent = snapshot.size;
 
     snapshot.forEach(docSnap => {
       const data = docSnap.data();
-      const fields = data.fields || {};
+      const fields = data.fields || data; // fallback to top-level
 
       if ((data.status || "").toLowerCase() === "completed") completed++;
 
-      // Search filter
-      if (search.value && !fields["Name"]?.toLowerCase().includes(search.value.toLowerCase())) return;
+      // Search filter (case-insensitive)
+      if (search.value && !(
+        (fields.Name || fields.name || "").toLowerCase().includes(search.value.toLowerCase())
+      )) return;
+
+      const statusClass =
+        (data.status === "Completed") ? "status-done" :
+        (data.status === "In Progress") ? "status-progress" :
+        "status-new";
 
       const div = document.createElement("div");
       div.className = "item";
 
-      const statusClass = 
-        data.status === "Completed" ? "status-done" :
-        data.status === "In Progress" ? "status-progress" : "status-new";
-
       div.innerHTML = `
-        <strong>${fields["Name"] || "No Name"}</strong><br>
-        ${fields["Contact Information"] || "No Contact"}<br>
-        ${fields["Service"] || "No Service"}<br>
+        <strong>${fields.Name || fields.name || "No Name"}</strong><br>
+        ${fields["Contact Information"] || fields.contact || "No Contact"}<br>
+        ${fields.Service || fields.service || "No Service"}<br>
         <span class="${statusClass}">${data.status || "New"}</span>
         <br>
         <select onchange="updateStatus('${docSnap.id}', this.value)">
@@ -209,6 +211,7 @@ function loadOrders() {
           <button onclick="deleteOrder('${docSnap.id}')">Delete</button>
         </div>
       `;
+
       ordersList.appendChild(div);
     });
 
@@ -216,7 +219,6 @@ function loadOrders() {
   });
 }
 
-// LOAD TICKETS
 function loadTickets() {
   const ticketsList = document.getElementById("ticketsList");
 
@@ -226,25 +228,24 @@ function loadTickets() {
 
     snapshot.forEach(docSnap => {
       const data = docSnap.data();
-      const fields = data.fields || {};
+      const fields = data.fields || data;
 
       const div = document.createElement("div");
       div.className = "item";
 
       div.innerHTML = `
-        <strong>${fields["Name"] || "No Name"}</strong><br>
-        ${fields["Contact Information"] || "No Contact"}<br>
+        <strong>${fields.Name || fields.name || "No Name"}</strong><br>
+        ${fields["Contact Information"] || fields.contact || "No Contact"}<br>
         ${data.type || "Ticket"}<br>
-
         <select onchange="updateTicket('${docSnap.id}', this.value)">
           <option ${data.status==="Open"?"selected":""}>Open</option>
           <option ${data.status==="Resolved"?"selected":""}>Resolved</option>
         </select>
-
         <div class="actions">
           <button onclick="deleteTicket('${docSnap.id}')">Delete</button>
         </div>
       `;
+
       ticketsList.appendChild(div);
     });
   });
