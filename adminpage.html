@@ -254,9 +254,11 @@ function loadTickets() {
       div.className = "item";
 
       div.innerHTML = `
-        <strong>${data.name}</strong><br>
-        ${data.email}<br>
-        ${data.issue}<br>
+        const fields = data.fields || {};
+
+      <strong>${fields["Name"] || "No Name"}</strong><br>
+      ${fields["Contact Information"] || "No Contact"}<br>
+      ${fields["Service"] || "No Service"}<br>
 
         <select onchange="updateTicket('${docSnap.id}', this.value)">
           <option>Open</option>
