@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Summit Admin Panel V5</title>
+<title>Summit Admin Panel</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
@@ -22,9 +22,7 @@ header {
   font-weight: 600;
 }
 
-.container {
-  padding: 2rem;
-}
+.container { padding: 2rem; }
 
 /* LOGIN */
 #login {
@@ -42,7 +40,6 @@ header {
   text-align: center;
 }
 
-/* INPUTS */
 input {
   padding: 0.7rem;
   width: 100%;
@@ -57,13 +54,10 @@ button {
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  margin-top: 0.5rem;
 }
 
 /* DASHBOARD */
-.dashboard {
-  display: none;
-}
+.dashboard { display: none; }
 
 .grid {
   display: grid;
@@ -77,7 +71,6 @@ button {
   border-radius: 10px;
 }
 
-/* ITEMS */
 .item {
   background: #020617;
   padding: 1rem;
@@ -89,25 +82,11 @@ button {
 .status-progress { color: #facc15; }
 .status-done { color: #22c55e; }
 
-.actions {
-  margin-top: 0.5rem;
-}
-
 .actions button {
   background: #ef4444;
-  margin-right: 0.5rem;
-}
-
-select {
   margin-top: 0.5rem;
-  padding: 0.4rem;
 }
 
-.empty {
-  opacity: 0.6;
-}
-
-/* SEARCH */
 .search {
   margin-bottom: 1rem;
 }
@@ -127,7 +106,7 @@ select {
 
 <!-- DASHBOARD -->
 <div class="dashboard" id="dashboard">
-  <header>Summit Web Co. Admin Panel V5</header>
+  <header>Summit Web Co. Admin Panel</header>
 
   <div class="container">
     <div class="grid">
@@ -162,20 +141,26 @@ select {
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, onSnapshot, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
+/* FIREBASE CONFIG */
 const firebaseConfig = {
-  apiKey: "AIzaSyCSBbgbEqdwm4WthtcaeMx54HNvTStsHIg",
-  authDomain: "summit-web-co.firebaseapp.com",
-  projectId: "summit-web-co",
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// LOGIN
+/* 🔐 PASSCODE LOGIN */
+const ADMIN_PASSCODE = "ThePeak2026";
+
 window.login = function () {
-  if (document.getElementById("passcode").value === "ThePeak2026") {
+  const input = document.getElementById("passcode").value;
+
+  if (input === ADMIN_PASSCODE) {
     document.getElementById("login").style.display = "none";
     document.getElementById("dashboard").style.display = "block";
+
     loadOrders();
     loadTickets();
   } else {
@@ -183,21 +168,19 @@ window.login = function () {
   }
 };
 
-document.getElementById("passcode").addEventListener("keypress", function(e) {
-  if (e.key === "Enter") {
-    login();
-  }
+document.getElementById("passcode").addEventListener("keypress", e => {
+  if (e.key === "Enter") login();
 });
 
-// LOAD ORDERS
+/* 📦 LOAD ORDERS */
 function loadOrders() {
   const list = document.getElementById("ordersList");
   const search = document.getElementById("orderSearch");
 
   onSnapshot(collection(db, "orders"), (snapshot) => {
-    let completed = 0;
     list.innerHTML = "";
 
+    let completed = 0;
     document.getElementById("orderCount").textContent = snapshot.size;
 
     snapshot.forEach((docSnap) => {
@@ -206,26 +189,27 @@ function loadOrders() {
 
       if (data.status === "Completed") completed++;
 
-      if (search.value && !fields["Name"]?.toLowerCase().includes(search.value.toLowerCase())) return;
-
-      const div = document.createElement("div");
-      div.className = "item";
+      if (search.value &&
+          !fields["Name"]?.toLowerCase().includes(search.value.toLowerCase()))
+        return;
 
       const statusClass =
         data.status === "Completed" ? "status-done" :
         data.status === "In Progress" ? "status-progress" : "status-new";
 
+      const div = document.createElement("div");
+      div.className = "item";
+
       div.innerHTML = `
         <strong>${fields["Name"] || "No Name"}</strong><br>
         ${fields["Contact Information"] || "No Contact"}<br>
         ${fields["Service"] || "No Service"}<br>
-        <span class="${statusClass}">${data.status || "New"}</span>
+        <span class="${statusClass}">${data.status || "New"}</span><br>
 
-        <br>
         <select onchange="updateStatus('${docSnap.id}', this.value)">
-          <option>New</option>
-          <option>In Progress</option>
-          <option>Completed</option>
+          <option ${data.status==="New"?"selected":""}>New</option>
+          <option ${data.status==="In Progress"?"selected":""}>In Progress</option>
+          <option ${data.status==="Completed"?"selected":""}>Completed</option>
         </select>
 
         <div class="actions">
@@ -238,11 +222,14 @@ function loadOrders() {
 
     document.getElementById("completedCount").textContent = completed;
   });
+
+  search.addEventListener("input", loadOrders);
 }
 
-// LOAD TICKETS
+/* 🎫 LOAD TICKETS */
 function loadTickets() {
   const list = document.getElementById("ticketsList");
+  const search = document.getElementById("ticketSearch");
 
   onSnapshot(collection(db, "tickets"), (snapshot) => {
     list.innerHTML = "";
@@ -250,20 +237,23 @@ function loadTickets() {
 
     snapshot.forEach((docSnap) => {
       const data = docSnap.data();
+      const fields = data.fields || {};
+
+      if (search.value &&
+          !fields["Name"]?.toLowerCase().includes(search.value.toLowerCase()))
+        return;
 
       const div = document.createElement("div");
       div.className = "item";
 
       div.innerHTML = `
-        const fields = data.fields || {};
-
-      <strong>${fields["Name"] || "No Name"}</strong><br>
-      ${fields["Contact Information"] || "No Contact"}<br>
-      ${fields["Service"] || "No Service"}<br>
+        <strong>${fields["Name"] || "No Name"}</strong><br>
+        ${fields["Contact Information"] || "No Contact"}<br>
+        ${data.type || "Ticket"}<br>
 
         <select onchange="updateTicket('${docSnap.id}', this.value)">
-          <option>Open</option>
-          <option>Resolved</option>
+          <option ${data.status==="Open"?"selected":""}>Open</option>
+          <option ${data.status==="Resolved"?"selected":""}>Resolved</option>
         </select>
 
         <div class="actions">
@@ -274,16 +264,18 @@ function loadTickets() {
       list.appendChild(div);
     });
   });
+
+  search.addEventListener("input", loadTickets);
 }
 
-// UPDATE
+/* 🔄 UPDATE */
 window.updateStatus = (id, status) =>
   updateDoc(doc(db, "orders", id), { status });
 
 window.updateTicket = (id, status) =>
   updateDoc(doc(db, "tickets", id), { status });
 
-// DELETE
+/* ❌ DELETE */
 window.deleteOrder = (id) =>
   deleteDoc(doc(db, "orders", id));
 
