@@ -202,10 +202,11 @@ function loadOrders() {
 
     snapshot.forEach((docSnap) => {
       const data = docSnap.data();
+      const fields = data.fields || {};
 
       if (data.status === "Completed") completed++;
 
-      if (search.value && !data.name?.toLowerCase().includes(search.value.toLowerCase())) return;
+      if (search.value && !fields["Name"]?.toLowerCase().includes(search.value.toLowerCase())) return;
 
       const div = document.createElement("div");
       div.className = "item";
@@ -215,10 +216,10 @@ function loadOrders() {
         data.status === "In Progress" ? "status-progress" : "status-new";
 
       div.innerHTML = `
-        <strong>${data.name}</strong><br>
-        ${data.email}<br>
-        ${data.service}<br>
-        <span class="${statusClass}">${data.status}</span>
+        <strong>${fields["Name"] || "No Name"}</strong><br>
+        ${fields["Contact Information"] || "No Contact"}<br>
+        ${fields["Service"] || "No Service"}<br>
+        <span class="${statusClass}">${data.status || "New"}</span>
 
         <br>
         <select onchange="updateStatus('${docSnap.id}', this.value)">
